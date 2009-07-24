@@ -11,7 +11,7 @@
 
    <global>
    <blocks>
-	<madetoorder><class>Metrof_FBConnect_Block</class></madetoorder>
+	<fbconnect><class>Metrof_FBConnect_Block</class></fbconnect>
 	<catalog>
 		<rewrite>
 			<product_list>Metrof_FBConnect_Block_Product_List</product_list>
@@ -21,62 +21,31 @@
    </blocks>
 
 	<resources>
-		<madetoorder_setup>
+		<fbconnect_setup>
 			<setup>
 				<module>Metrof_FBConnect</module>
 			</setup>
 			<connection>
 				<use>core_setup</use>
 			</connection>
-		</madetoorder_setup>
+		</fbconnect_setup>
 	</resources>
-
         <models>
-            <madetoorder><class>Metrof_FBConnect_Model</class></madetoorder>
-            <catalog>
-                <rewrite>
-                <product>Metrof_FBConnect_Model_Product</product>
-                </rewrite> 
-            </catalog>
-			<!--
-            <catalog>
-                <rewrite>
-                <product_type_abstract>Metrof_FBConnect_Model_Product_TypeAbstract</product>
-                </rewrite> 
-            </catalog>
-			-->
-            <sales>
-                <rewrite>
-                   <quote>Metrof_FBConnect_Model_Sales_Quote</quote>
-                </rewrite> 
-            </sales>
-            <checkout>
-                <rewrite>
-                    <cart>Metrof_FBConnect_Model_Cart</cart>
-                </rewrite> 
-            </checkout>
-<!--
-            <core>
-                <rewrite>
-                    <abstract>Metrof_FBConnect_Model_Abstract</abstract>
-                </rewrite> 
-            </core>
--->
+            <fbconnect><class>Metrof_FBConnect_Model</class></fbconnect>
         </models>
-
     <helpers>
-        <madetoorder>
+        <fbconnect>
             <class>Metrof_FBConnect_Helper</class>
-        </madetoorder>
+        </fbconnect>
     </helpers>
     </global>
 
     <frontend>
      <layout>
           <updates>
-              <madetoorder>
-                  <file>madetoorder.xml</file>
-              </madetoorder>
+              <metrof_fbc>
+                  <file>metrof_fbc.xml</file>
+              </metrof_fbc>
           </updates>
      </layout>
 
@@ -101,11 +70,11 @@
           </sales_convert_quote_item_to_order_item>
 	  <checkout_cart_before_add>
             <observers>
-              <madetoorder>
+              <fbconnect>
                 <type>object</type>
                 <class>Metrof_FBConnect_Helper_Event</class>
                 <method>attachSpecialQuoteAttribs</method>
-              </madetoorder>
+              </fbconnect>
             </observers>
 	  </checkout_cart_before_add>
           <sales_quote_save_before>
@@ -138,50 +107,23 @@
         </events>
 
         <routers>
-            <madetoorder>
+            <fbconnect>
                 <use>standard</use>
                 <args>
 					<module>Metrof_FBConnect</module>
                     <frontName>fbc</frontName>
                 </args>
-            </madetoorder>
+            </fbconnect>
         </routers>
     </frontend>
 
 	<default>
-		<!--
-		<mto>
-			<measurement_class><metric>no</metric></measurement_class>
-			<measurement_class><metric_use_mm>no</metric_use_mm></measurement_class>
-			<mto_field_1>
-				<field_name>mto_width</field_name>
-				<field_type>range</field_type>
-				<use_as_dimension>width</use_as_dimension>
-			</mto_field_1>
-			<mto_field_2>
-				<field_name>mto_height</field_name>
-				<field_type>range</field_type>
-				<use_as_dimension>height</use_as_dimension>
-			</mto_field_2>
-			<mto_field_3>
-				<field_name>mto_depth</field_name>
-				<field_type>range</field_type>
-				<use_as_dimension>depth</use_as_dimension>
-			</mto_field_3>
-			<mto_field_4>
-				<field_name></field_name>
-				<field_type>disabled</field_type>
-				<use_as_dimension>none</use_as_dimension>
-			</mto_field_4>
-			<mto_field_5>
-				<field_name></field_name>
-				<field_type>disabled</field_type>
-				<use_as_dimension>none</use_as_dimension>
-			</mto_field_5>
-		</mto>
-		-->
-	</default>
+		<fbconnect>
+			<apikey></apikey>
+			<secret></secret>
+		</fbconnect>
 
+	</default>
 
     <adminhtml>
         <acl>
@@ -206,9 +148,9 @@
 		</acl>
 		<layout>
 			<updates>
-				<madetoorder>
-					<file>madetoorder.xml</file>
-				</madetoorder>
+				<fbconnect>
+					<file>metrof_fbc.xml</file>
+				</fbconnect>
 			</updates>
 		</layout>
 	</adminhtml>

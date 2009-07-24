@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Metrof_FBConnect>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Metrof_FBConnect>
+    </modules>
+</config>
