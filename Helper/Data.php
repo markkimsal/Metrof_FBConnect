@@ -46,4 +46,43 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getUrl('fbc/index/login');
 	}
 
+	public function setFbCookies($fbParams) {
+		$fbObj        = $this->getFb($fbParams);
+		//HACK to fix Facebook's strange xdreceive handling of 
+		//logins and cookies
+		$fbObj->api_client->session_key = $fbParams['session_key'];
+		$fbObj->set_cookies($fbParams['user'],
+			$fbParams['session_key'],
+			$fbParams['expires'],
+			$fbParams['ss']);
+	}
+
+	/**
+	 * Get the facebook client object for easy access.
+	 */
+	public function getFb($fbParams = null) {
+		static $facebook = null;
+
+		if ($facebook === null) {
+			$apikey   = (string) Mage::getConfig()->getNode('default/fbconnect/apikey');
+			$fbSecret = (string) Mage::getConfig()->getNode('default/fbconnect/secret');
+			$facebook = new Metrof_FBConnect_Helper_Facebook($apikey, $fbSecret);
+			if (!$facebook) {
+				error_log('Could not create facebook client.');
+			}
+			if (is_array($fbParams)) {
+				$facebook->fb_params = $fbParams;
+				$facebook->fb_params = $fbParams;
+				$facebook->api_client->set_user($fbParams['user']);
+			}
+		}
+		return $facebook;
+	}
+
+
+	public function getDesiredAttr($attr) {
+		$fbObj        = $this->getFb();
+		$fbInfos = $fbObj->api_client->users_getInfo($fbObj->user, $attr);
+		return $fbInfos[0];
+	}
 }

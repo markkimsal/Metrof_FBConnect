@@ -37,26 +37,70 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 	/**
 	 * XDReceiver page is unnecessary because FBConnect javascript doesn't work with prototype.
+	 *
+	 * Steps:
+	 *
+	 *   hash URL params
+	 *   find an existing FB UID
+	 *   if found, login user
+	 *   if not found, create a new one
+	 *   add or update shipping addresses
+	 *   redirect 
 	 */
 	public function xdreceiverAction() {
 		//hash URL params
-		$fbSecret = Mage::getConfig()->getNode('default/fbconnect/secret');
+		$fbSecret = (string)Mage::getConfig()->getNode('default/fbconnect/secret');
 		$fbParams = $this->_getXdParams($fbSecret);
 
 		//find an existing FB UID
-		if (isset($fbParams['user']))
-			echo "you did it";
-		else 
-			echo "login problem";
+		if (!isset($fbParams['user'])) {
+			//failure
+        	$sess = Mage::getSingleton('customer/session');
+			$sess->addWarning('Your facebook login failed.  Try again later.');
+        	$this->_redirect('customer/account/login');
+			return false;
+		}
 
 
+		Mage::helper('fbconnect')->setFbCookies($fbParams);
 		//if found, login user
+		$exUid = $this->findExistingUid($fbParams);
+		if (!$exUid) {
+			//if not found, create a new one
+			$user = $this->makeNewUser($fbParams);
+		} else {
+			$user = Mage::getModel('customer/customer')->load($exUid);
+		}
+		$sess = Mage::getSingleton('customer/session');
+		$sess->setCustomer($user);
+		Mage::dispatchEvent('customer_login', array('customer'=>$user));
+		Mage::dispatchEvent('customer_customer_authenticated', array(
+		   'model'    => $sess,
+		   'password' => '',
+		));
 
-		//if not found, create a new one
+
+		$desiredAttr = array('first_name', 'last_name', 'username');
+		$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
+
 
 		//add or update shipping addresses
 
 		//redirect 
+        $this->_redirect('customer/account');
+
+       	$sess = Mage::getSingleton('customer/session');
+		$sess->addSuccess(
+			sprintf('Congratulations.  Your facebook account is now connected with our store.  You can edit your 
+			shipping addresses in your account page. <a href="%s">click here to visit your account page.</a>',
+				Mage::helper('customer')->getDashboardUrl()
+			));
+		$sess->addSuccess(
+			' 
+		<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="http://external.ak.fbcdn.net/safe_image.php?logo&url=http%3A%2F%2Fprofile.ak.fbcdn.net%2Fv226%2F523%2F112%2Fq'.$fbParams['user'].'_9457.jpg&v=5"/>	
+		Welcome, '.$attr['first_name'].'!
+			');
+
 	}
 
 
@@ -108,5 +152,48 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$str .= $secret;
 
 		return md5($str);
+	}
+
+	/**
+	 * Always get back an int, if 0 then nothing found.
+	 */
+	protected function findExistingUid($fbParams) {
+		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$pref = Mage::getConfig()->getTablePrefix();
+		$stmt = $read->query('select `user_id` from `'.$pref.'fb_uid_link` where fb_uid = "'.$fbParams['user'].'"');
+		$q = $stmt->fetchAll();
+		if (count($q) > 0) {
+			return $q[0]['user_id'];
+		}
+		return 0;
+
+		$select = $read->select();
+		$select->from('eav_entity_type', 'entity_type_id');
+		$select->where('entity_type_code = "quote_item"');
+		$stmt = $select->query();
+		$result = $stmt->fetchAll();
+		$quote_type_id = $result[0]['entity_type_id'];
+	}
+
+
+	protected function makeNewUser($fbParams) {
+		$pref = Mage::getConfig()->getTablePrefix();
+		$store = Mage::app()->getStore();
+		$storeId = $store->getStoreId();
+		$webstId = $store->getWebsiteId();
+		$customer = Mage::getModel('customer/customer');
+		$customer->setData('store_id',   $storeId);
+		$customer->setData('website_id', $webstId);
+		$customer->setData('is_active', 1);
+		$customer->save();
+		$customerId = $customer->getId();
+//		var_dump($customerId);exit();
+
+		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
+		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d').'")');
+		$stmt->execute();
+
+		return $customer;
 	}
 }
