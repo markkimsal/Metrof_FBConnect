@@ -16,13 +16,11 @@ extends Mage_Customer_Model_Entity_Customer  {
     protected function _beforeSave(Varien_Object $customer)
     {
 
-		//old customer, do old checking
-		if ($customer->getId()) {
+		//FB doesn't always give us an email... get over it.
+		if ($customer->getEmail()) {
 			$select = $this->_getReadAdapter()->select()
 				->from($this->getEntityTable(), array($this->getEntityIdField()))
-				;
-	//FB doesn't always give us an email... get over it.
-	//            ->where('email=?', $customer->getEmail());
+	            ->where('email=?', $customer->getEmail());
 			if ($customer->getSharingConfig()->isWebsiteScope()) {
 				$select->where('website_id=?', (int) $customer->getWebsiteId());
 			}

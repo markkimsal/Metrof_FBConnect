@@ -80,11 +80,25 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		));
 
 
-		$desiredAttr = array('first_name', 'last_name', 'username');
+		$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location');
 		$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
 
+		if ($attr['last_name'] !== '') {
+			$user->setLastname($attr['last_name']);
+		} else {
+			$user->setLastname('Customer');
+		}
+		if ($attr['first_name'] !== '') {
+			$user->setFirstname($attr['first_name']);
+		} else {
+			$user->setFirstname('Guest');
+		}
+		$user->save();
 
 		//add or update shipping addresses
+		if ($attr['current_location'] != NULL) {
+			//setup shipping address.
+		}
 
 		//redirect 
         $this->_redirect('customer/account');
@@ -96,10 +110,11 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 				Mage::helper('customer')->getDashboardUrl()
 			));
 		$sess->addSuccess(
-			' 
-		<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="http://external.ak.fbcdn.net/safe_image.php?logo&url=http%3A%2F%2Fprofile.ak.fbcdn.net%2Fv226%2F523%2F112%2Fq'.$fbParams['user'].'_9457.jpg&v=5"/>	
+			'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>
 		Welcome, '.$attr['first_name'].'!
 			');
+		/*
+		 */
 
 	}
 

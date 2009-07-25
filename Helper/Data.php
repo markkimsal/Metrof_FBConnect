@@ -74,6 +74,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 				$facebook->fb_params = $fbParams;
 				$facebook->fb_params = $fbParams;
 				$facebook->api_client->set_user($fbParams['user']);
+				$facebook->api_client->session_key = $fbParams['session_key'];
 			}
 		}
 		return $facebook;
@@ -83,6 +84,12 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getDesiredAttr($attr) {
 		$fbObj        = $this->getFb();
 		$fbInfos = $fbObj->api_client->users_getInfo($fbObj->user, $attr);
-		return $fbInfos[0];
+		if (isset($fbInfos[0]))
+			return $fbInfos[0];
+		$ret = array();
+		foreach ($attr as $v) {
+			$ret[$v] = null;
+		}
+		return $ret;
 	}
 }

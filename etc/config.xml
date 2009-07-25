@@ -161,6 +161,10 @@
 		<fbconnect>
 			<apikey></apikey>
 			<secret></secret>
+			<!--
+			<apikey></apikey>
+			<secret></secret>
+			-->
 		</fbconnect>
 
 	</default>
