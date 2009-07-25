@@ -103,6 +103,13 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		//redirect 
         $this->_redirect('customer/account');
 
+		/*
+		$apikey = Mage::getConfig()->getNode('default/fbconnect/apikey');
+		echo('Location: '.sprintf('http://www.facebook.com/authorize.php?api_key=%s&v=1.0&ext_perm=%s',$apikey, 'email'));
+		exit();
+		header('Location: '.sprintf('http://www.facebook.com/authorize.php?api_key=%s&v=1.0&ext_perm=%s',$apikey, 'email'));
+		 */
+
        	$sess = Mage::getSingleton('customer/session');
 		if (!$exUid) {
 			$sess->addSuccess(

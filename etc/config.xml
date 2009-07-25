@@ -90,24 +90,8 @@
           </updates>
      </layout>
         <events>
-			<checkout_cart_product_add_after>
-            <observers>
-              <my_cart_product_checker>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>attachSpecialQuoteAttribs</method>
-              </my_cart_product_checker>
-            </observers>
-			</checkout_cart_product_add_after>
-          <sales_convert_quote_item_to_order_item>
-            <observers>
-              <my_cart_checker>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>attachSpecialOrderAttribs</method>
-              </my_cart_checker>
-            </observers>
-          </sales_convert_quote_item_to_order_item>
+			<!--
+
 	  <checkout_cart_before_add>
             <observers>
               <fbconnect>
@@ -117,33 +101,7 @@
               </fbconnect>
             </observers>
 	  </checkout_cart_before_add>
-          <sales_quote_save_before>
-            <observers>
-              <my_cart_checker>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>cartBeforeSave</method>
-              </my_cart_checker>
-            </observers>
-          </sales_quote_save_before>
-          <sales_quote_save_after>
-            <observers>
-              <my_cart_checker>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>cartAfterSave</method>
-              </my_cart_checker>
-            </observers>
-          </sales_quote_save_after>
-          <checkout_cart_update_items_after>
-            <observers>
-              <fbc_qty_updater>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>cartAfterUpdate</method>
-              </fbc_qty_updater>
-            </observers>
-          </checkout_cart_update_items_after>
+		  -->
         </events>
 
         <routers>
@@ -162,8 +120,6 @@
 			<apikey></apikey>
 			<secret></secret>
 			<!--
-			<apikey></apikey>
-			<secret></secret>
 			-->
 		</fbconnect>
 

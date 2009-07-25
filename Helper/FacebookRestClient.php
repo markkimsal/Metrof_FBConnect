@@ -3034,8 +3034,15 @@ function toggleDisplay(id, type) {
   protected function convert_result($data, $method, $params) {
     $is_xml = (empty($params['format']) ||
                strtolower($params['format']) != 'json');
-    return ($is_xml) ? $this->convert_xml_to_result($data, $method, $params)
-                     : json_decode($data, true);
+	if ($is_xml) {
+		$this->convert_xml_to_result($data, $method, $params);
+	} else {
+		//hack for PHP 5.2.1 json_decode bug http://bugs.php.net/bug.php?id=38680
+		$ret = json_decode($data, true);
+		if ($ret === NULL)
+		return $data;
+		return $ret;
+	}
   }
 
   /**
