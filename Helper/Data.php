@@ -46,6 +46,16 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getUrl('fbc/index/login');
 	}
 
+	public function getAddressEditUrl() {
+        return Mage::getUrl('customer/address/edit');
+	}
+
+	public function getEmailEditUrl() {
+        return Mage::getUrl('customer/account/edit');
+	}
+
+
+
 	public function setFbCookies($fbParams) {
 		$fbObj        = $this->getFb($fbParams);
 		//HACK to fix Facebook's strange xdreceive handling of 

@@ -104,17 +104,23 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
         $this->_redirect('customer/account');
 
        	$sess = Mage::getSingleton('customer/session');
-		$sess->addSuccess(
-			sprintf('Congratulations.  Your facebook account is now connected with our store.  You can edit your 
-			shipping addresses in your account page. <a href="%s">click here to visit your account page.</a>',
-				Mage::helper('customer')->getDashboardUrl()
-			));
-		$sess->addSuccess(
-			'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>
-		Welcome, '.$attr['first_name'].'!
-			');
-		/*
-		 */
+		if (!$exUid) {
+			$sess->addSuccess(
+				sprintf('Congratulations.  Your facebook account is now connected with our store.  You can edit your 
+				shipping addresses in your account page. 
+				<ul><li>Edit your shipping address: <a href="%s">click here.</a></li>
+				<li>Add your e-mail: <a href="%s">click here.</a></li></ul>',
+					Mage::helper('fbconnect')->getAddressEditUrl(),
+					Mage::helper('fbconnect')->getEmailEditUrl()
+				));
+			$sess->addSuccess(
+				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>
+			Welcome, '.$attr['first_name'].'!
+				');
+		} else {
+			$sess->addSuccess(
+				'Welcome back, '.$attr['first_name'].'! <img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>');
+		}
 
 	}
 
