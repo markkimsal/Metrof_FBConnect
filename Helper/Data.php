@@ -102,4 +102,25 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return $ret;
 	}
+
+
+
+	/**
+	 * Returns true if the user is connected with FB
+	 */
+	protected function userIsFb($user) {
+		if (is_object($user)) {
+			$uid = $user->getId();
+		} else{
+			$uid = $user;
+		}
+		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$pref = Mage::getConfig()->getTablePrefix();
+		$stmt = $read->query('select `fb_uid` from `'.$pref.'fb_uid_link` where user_id = "'.$uid.'"');
+		$q = $stmt->fetchAll();
+		if (count($q) > 0) {
+			return $q[0]['fb_uid'];
+		}
+		return 0;
+	}
 }
