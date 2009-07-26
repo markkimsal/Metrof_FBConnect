@@ -73,6 +73,11 @@
 				</entity>
 			</entities>
 		</fbconnect_entity>
+		<core>
+			<rewrite>
+				<email_template>Metrof_FBConnect_Model_FbEmail</email_template>
+			</rewrite>
+		</core>
     </models>
     <helpers>
         <fbconnect>

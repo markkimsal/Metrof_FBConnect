@@ -108,7 +108,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	/**
 	 * Returns true if the user is connected with FB
 	 */
-	protected function userIsFb($user) {
+	public function userIsFb($user) {
 		if (is_object($user)) {
 			$uid = $user->getId();
 		} else{
