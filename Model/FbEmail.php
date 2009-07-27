@@ -31,15 +31,17 @@ extends Mage_Core_Model_Email_Template {
         }
 
 		if ($email == '') {
-			$fbUid = $this->_findFbUserByContext();
-			if (!$fbUid) return false;
+			$fbContext = $this->_findFbUserByContext();
+			if (!$fbContext) return false;
 		}
 
-		if (isset($fbUid)) {
+		if (isset($fbContext)) {
 			$variables['email'] = $email;
 			$variables['name'] = $name;
 	        try {
-				$this->_sendAsFbNotification($variables);
+				$fbUid   = $fbContext['fbUid'];
+				$storeId = $fbContext['storeId'];
+				$this->_sendAsFbNotification($variables, $fbUid, $storeId);
 			}
 			catch (Exception $e) {
 				return false;
@@ -97,7 +99,14 @@ extends Mage_Core_Model_Email_Template {
 	 */
 	public function _findFbUserByContext() {
 		$req = Mage::app()->getRequest();
-		if (stripos($req->getModuleName(), 'admin')) {
+		$ret = array(
+			'mode' => '',
+			'storeId'    => NULL,
+			'fbUid'      => NULL,
+			'customerId' => NULL);
+
+
+		if (stripos($req->getModuleName(), 'admin') !== FALSE) {
 			$isAdmin = true;
 		} else {
 			$isAdmin = false;
@@ -107,10 +116,60 @@ extends Mage_Core_Model_Email_Template {
 			$fbObj = Mage::helper('fbconnect')->getFb();
 			return $fbObj->user;
 		}
+		if ($isAdmin) {
+			if ($order = Mage::registry('current_order')) {
+				$ret['mode'] = 'current_order';
+				$customerId = $order->getCustomerId();
+
+				if (intval($customerId) > 0) {
+					$ret['customerId'] = intval($customerId);
+					$ret['fbUid']      =  Mage::helper('fbconnect')->userIsFb(intval($customerId));
+					$ret['storeId']    = (int)$order->getData('store_id');
+					return $ret;
+				}
+				//no customer associated
+				return NULL;
+			}
+			if ($invoice = Mage::registry('current_invoice')) {
+				$ret['mode'] = 'current_invoice';
+				$customerId = $invoice->getCustomerId();
+				if (intval($customerId) > 0) {
+					$ret['customerId'] = intval($customerId);
+					$ret['fbUid']      =  Mage::helper('fbconnect')->userIsFb(intval($customerId));
+					$ret['storeId']    = (int)$invoice->getData('store_id');
+					return $ret;
+				}
+				//no customer associated
+				return NULL;
+			}
+			if ($shipment = Mage::registry('current_shipment')) {
+				$ret['mode'] = 'current_shipment';
+				$customerId = $shipment->getCustomerId();
+				if (intval($customerId) > 0) {
+					$ret['customerId'] = intval($customerId);
+					$ret['fbUid']      =  Mage::helper('fbconnect')->userIsFb(intval($customerId));
+					$ret['storeId']    = (int)$shipment->getData('store_id');
+					return $ret;
+				}
+				//no customer associated
+				return NULL;
+			}
+
+
+
+			return NULL;
+		}
 		return 0;
 	}
 
-	public function _sendAsFbNotification($variables) {
+	/**
+	 * Send a small notification to the customer and a full e-mail if they allow it.
+	 *
+	 * @param Array $variables same variables sent to regular email_template
+	 * @param int   $fbUid  if null, the currently logged in user is assumed to the recipient (front-end okay)
+	 * @param int   $storeId  if null, the currently active store is assumed to be the default URL for links (front-end okay)
+	 */
+	public function _sendAsFbNotification($variables, $fbUid = NULL, $storeId = NULL) {
         $text = $this->getProcessedTemplate($variables, true);
         $subject = $this->getProcessedTemplateSubject($variables);
 
@@ -122,8 +181,20 @@ extends Mage_Core_Model_Email_Template {
 			$text = strip_tags($fbml);
         }
 		$fbObj = Mage::helper('fbconnect')->getFb();
-  		$ret  = $fbObj->api_client->notifications_sendEmail($fbObj->user, $subject, $text, $fbml);
-  		$ret2 = $fbObj->api_client->notifications_send(array($fbObj->user), $subject. '.  <a href="'.Mage::getUrl('customer/account').'">Visit your account.</a>', 'app_to_user');
+		if ($fbUid === NULL) {
+			//use the currently logged in user
+			$fbUid = $fbObj->user;
+		}
+
+		/*
+		if ($storeId === NULL) {
+			$storeId = Mage::app()->getStore()->getId();
+		}
+		 */
+		$url = Mage::app()->getStore($storeId)->getUrl('customer/account');
+
+  		$ret  = $fbObj->api_client->notifications_sendEmail($fbUid, $subject, $text, $fbml);
+  		$ret2 = $fbObj->api_client->notifications_send(array($fbUid), $subject. '.  <a target="_blank" href="'.$url.'">Visit your account.</a>', 'app_to_user');
 		return $ret;
 	}
 }
