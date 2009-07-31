@@ -65,11 +65,11 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		static $facebook = null;
 
 		if ($facebook === null) {
-			$apikey   = (string) Mage::getConfig()->getNode('default/fbconnect/apikey');
-			$fbSecret = (string) Mage::getConfig()->getNode('default/fbconnect/secret');
+			$apikey   = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
+			$fbSecret = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/secret');
 			$facebook = new Metrof_FBConnect_Helper_Facebook($apikey, $fbSecret);
 			if (!$facebook) {
-				error_log('Could not create facebook client.');
+				Mage::throwException('Could not create facebook client.');
 			}
 			if (is_array($fbParams)) {
 				$facebook->fb_params = $fbParams;
@@ -114,8 +114,6 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return 0;
 	}
-
-
 
 
 	/**

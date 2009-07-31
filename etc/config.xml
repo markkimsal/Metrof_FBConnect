@@ -78,14 +78,14 @@
     </frontend>
 
 	<default>
-		<fbconnect>
-			<apikey></apikey>
-			<secret></secret>
-			<!--
-			<apikey></apikey>
-			<secret></secret>
-			-->
-		</fbconnect>
+		<metrof_fbc>
+			<fbconnect>
+				<apikey>API KEY FROM FACEBOOK</apikey>
+				<secret>SECRET CODE FOR YOUR FACEBOOK APP</secret>
+				<!--
+				-->
+			</fbconnect>
+		</metrof_fbc>
 
 	</default>
 
