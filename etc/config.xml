@@ -75,6 +75,15 @@
                 </args>
             </fbconnect>
         </routers>
+        <translate>
+            <modules>
+                <Mage_Contacts>
+                    <files>
+                        <default>Metrof_FBConnect.csv</default>
+                    </files>
+                </Mage_Contacts>
+            </modules>
+        </translate>
     </frontend>
 
 	<default>

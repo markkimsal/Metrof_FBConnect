@@ -133,27 +133,52 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
        	$sess = Mage::getSingleton('customer/session');
 		if (!$exUid) {
 			$sess->addSuccess(
-				sprintf('Congratulations.  Your facebook account is now connected with our store.  You can edit your 
-				shipping addresses in your account page. 
-				<ul><li>Edit your shipping address: <a href="%s">click here.</a></li>
-				<li>Add your e-mail: <a href="%s">click here.</a></li>
-				<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li></ul>',
-					Mage::helper('fbconnect')->getAddressEditUrl(),
-					Mage::helper('fbconnect')->getEmailEditUrl(),
-					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-				));
+				$this->__('Congratulations.  Your facebook account is now connected with our store.')
+			);
 			$sess->addSuccess(
-				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>
-			Welcome, '.$attr['first_name'].'!
-				');
+				$this->__('You can edit your shipping addresses in your account page.')
+			);
+			$sess->addSuccess('<ul>'.
+				$this->__('<li>Edit your shipping address: <a href="%s">click here.</a></li>',
+					Mage::helper('fbconnect')->getAddressEditUrl()
+				)
+			);
+			$sess->addSuccess(
+				$this->__('<li>Add your e-mail: <a href="%s">click here.</a></li>',
+					Mage::helper('fbconnect')->getEmailEditUrl()
+				)
+			);
+			$sess->addSuccess(
+				$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
+					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
+				).'</ul>'
+			);
+
+			$sess->addSuccess(
+				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> '
+			);
+
+			$sess->addSuccess(
+				$this->__('Welcome, %s!',
+					$attr['first_name']
+				)
+			);
 		} else {
 			$sess->addSuccess(
-				'Welcome back, '.$attr['first_name'].'! <img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>');
+				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>'
+			);
+
+			$sess->addSuccess(
+				$this->__('Welcome back, %s!',
+					$attr['first_name']
+				)
+			);
 
 			$sess->addSuccess('<br/>'. 
-				sprintf('<li>Allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li></ul>',
+				$this->__('Allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a>',
 					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-					));
+				)
+			);
 		}
 	}
 
