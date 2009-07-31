@@ -37,6 +37,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 	 * Redirect to facebook with proper API keys in the URL
 	 */
 	public function loginAction() {
+		$locale = Mage::getStoreConfig('general/locale/code');
 		$urlParams = array();
 		$urlParts = array();
 		$urlParams['return_session'] = 1;
@@ -47,7 +48,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$urlParams['next']           = urlencode(Mage::getUrl('fbc/index/xdreceiver'));
 		$urlParams['cancel_url']     = urlencode(Mage::getUrl('*'));
 		$urlParams['fname']          = '_opener';
-		$urlParams['locale']         = 'en_US';
+		$urlParams['locale']         = $locale;
 		$urlParams['channel_url']    = urlencode(Mage::getUrl('fbc/index/xdreceiver'));
 		$url = 'http://www.facebook.com/login.php?';
 
