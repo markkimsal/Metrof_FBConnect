@@ -114,7 +114,8 @@ extends Mage_Core_Model_Email_Template {
 
 		if (!$isAdmin) {
 			$fbObj = Mage::helper('fbconnect')->getFb();
-			return $fbObj->user;
+			$ret['fbUid']      =  $fbObj->user;
+			return $ret;
 		}
 		if ($isAdmin) {
 			if ($order = Mage::registry('current_order')) {
