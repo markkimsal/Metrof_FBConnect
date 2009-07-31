@@ -2,7 +2,7 @@
 <config>
    <modules>
       <Metrof_FBConnect>
-         <version>0.2.0</version>
+         <version>0.3.0</version>
          <depends>
             <Mage_Customer />
          </depends>
@@ -12,14 +12,6 @@
    <global>
    <blocks>
 	<fbconnect><class>Metrof_FBConnect_Block</class></fbconnect>
-	<!--
-	<catalog>
-		<rewrite>
-			<product_list>Metrof_FBConnect_Block_Product_List</product_list>
-			<product_view>Metrof_FBConnect_Block_Product_View</product_view>
-		</rewrite> 
-	</catalog>
-	-->
    </blocks>
 
 	<resources>
@@ -32,29 +24,6 @@
 			</connection>
 		</fbconnect_setup>
 	</resources>
-	<!--
-            <customer>
-                <class>Mage_Customer_Model</class>
-                <resourceModel>customer_entity</resourceModel>
-            </customer>
-            <customer_entity>
-                <class>Mage_Customer_Model_Entity</class>
-                <entities>
-                    <entity>
-                        <table>customer_entity</table>
-                    </entity>
-                    <address_entity>
-                        <table>customer_address_entity</table>
-                    </address_entity>
-                    <value_prefix>
-                        <table>customer_entity</table>
-                    </value_prefix>
-                    <customer_group>
-                        <table>customer_group</table>
-                    </customer_group>
-                </entities>
-            </customer_entity>
-			-->
     <models>
 		<fbconnect>
 			<class>Metrof_FBConnect_Model</class>
@@ -95,18 +64,6 @@
           </updates>
      </layout>
         <events>
-			<!--
-
-	  <checkout_cart_before_add>
-            <observers>
-              <fbconnect>
-                <type>object</type>
-                <class>Metrof_FBConnect_Helper_Event</class>
-                <method>attachSpecialQuoteAttribs</method>
-              </fbconnect>
-            </observers>
-	  </checkout_cart_before_add>
-		  -->
         </events>
 
         <routers>
@@ -125,6 +82,8 @@
 			<apikey></apikey>
 			<secret></secret>
 			<!--
+			<apikey></apikey>
+			<secret></secret>
 			-->
 		</fbconnect>
 
