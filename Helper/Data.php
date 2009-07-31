@@ -1,25 +1,16 @@
 <?php
 // vim: set tabstop=4 
 // +===========================================================================+
-// | Cognifty Facebook Connect Magento Layout File                             |
+// | Facebook Connect Magento Helper                                           |
 // +===========================================================================+
-// | License:                                                                  |
+// | License: Proprietary                                                      |
 // +===========================================================================+
 // | Copyright (c) 2009 Mark Kimsal                                            |
 // | All rights reserved.                                                      |
 // |                                                                           |
 // | Redistribution and use in source and binary forms, with or without        |
-// | modification, are permitted provided that the following conditions are    |
-// | met:                                                                      |
+// | modification, are not permitted without express written consent.          |
 // |                                                                           |
-// | * Redistributions of source code must retain the above copyright notice,  |
-// |   this list of conditions and the following disclaimer.                   |
-// | * Redistributions in binary form must reproduce the above copyright       |
-// |   notice, this list of conditions and the following disclaimer in the     |
-// |   documentation and/or other materials provided with the distribution.    |
-// | * Neither the name of the Metrofindings.com nor the names of its          |
-// |   contributors may be used to endorse or promote products derived from    |
-// |   this software without specific prior written permission.                |
 // |                                                                           |
 // | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       |
 // | "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         |
@@ -122,5 +113,32 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 			return $q[0]['fb_uid'];
 		}
 		return 0;
+	}
+
+
+
+
+	/**
+	 * Make a new user out of some parameters
+	 * @return Object $customer new customer
+	 */
+	public function makeNewUser($fbParams) {
+		$pref = Mage::getConfig()->getTablePrefix();
+		$store = Mage::app()->getStore();
+		$storeId = $store->getStoreId();
+		$webstId = $store->getWebsiteId();
+		$customer = Mage::getModel('customer/customer');
+		$customer->setData('store_id',   $storeId);
+		$customer->setData('website_id', $webstId);
+		$customer->setData('is_active', 1);
+		$customer->save();
+		$customerId = $customer->getId();
+
+		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
+		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d').'")');
+		$stmt->execute();
+
+		return $customer;
 	}
 }

@@ -1,0 +1,42 @@
+Facebook Connect Magento Module License
+
+Definitions
+================================================================================
+To "convey" means actively propogating this software to other parties or 
+passively enabling other parties to recieve copies in any way.
+
+"Production purposes" means any activities which are designed to promote 
+or advertise business transactions.
+
+Permissions
+================================================================================
+You are hereby granted a non-exclusive right to execute this software on one 
+server and to make one back-up copy and one development copy.  Transferring or 
+conveying this software to another party is not permitted.  
+
+The development copy and the back-up copy can be located on different physical 
+hardware than the original copy.  Development copies are not intended for 
+production purposes.  Backup copies are not intended for production purposes.
+
+Virtual Servers
+================================================================================
+Installation of this product inside an instance of a virtualized server, using 
+virtualization technology as provided by the likes of Xen or VMware, contitutes 
+one server.  Multiple virtualized installations on one physical machine is not 
+allowed.
+
+
+Disclaimer of Warranty
+================================================================================
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR     
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,  
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,       
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR        
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF    
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING      
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS        
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+

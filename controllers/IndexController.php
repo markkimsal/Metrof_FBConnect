@@ -4,7 +4,6 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 {
     public function indexAction() {
 		$this->loadLayout();
-   //     $this->loadLayoutUpdates();
 		$this->renderLayout();
 	}
 
@@ -32,7 +31,6 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		header('Location: '.$url);
 		exit();
 
-//	http://www.facebook.com/login.php?return_session=1&nochrome=1&fbconnect=1&extern=2&display=popup&api_key=1bedcf4953aef1d8e8ce94c7801c8f3f&v=1.0&next=http%3A%2F%2Fhayley.metrofindings.com%2Fcognifty_ws%2Fwww%2Findex.php%2Ffbconnect.main.xdreceiver%2F%3Ffb_login%26fname%3D_opener%26guid%3D0.9244562202757464&cancel_url=http%3A%2F%2Fhayley.metrofindings.com%2Fcognifty_ws%2Fwww%2Findex.php%2Ffbconnect.main.xdreceiver%2F%23fname%3D_opener%26%257B%2522t%2522%253A3%252C%2522h%2522%253A%2522fbCancelLogin%2522%252C%2522sid%2522%253A%25220.389%2522%257D&channel_url=http%3A%2F%2Fhayley.metrofindings.com%2Fcognifty_ws%2Fwww%2Findex.php%2Ffbconnect.main.xdreceiver%2F&locale=en_US
 	}
 
 	/**
@@ -67,7 +65,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$exUid = $this->findExistingUid($fbParams);
 		if (!$exUid) {
 			//if not found, create a new one
-			$user = $this->makeNewUser($fbParams);
+			$user = Mage::helper('fbconnect')->makeNewUser($fbParams);
 		} else {
 			$user = Mage::getModel('customer/customer')->load($exUid);
 		}
@@ -104,11 +102,6 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
         $this->_redirect('customer/account');
 
 		$apikey = Mage::getConfig()->getNode('default/fbconnect/apikey');
-		/*
-		echo('Location: '.sprintf('http://www.facebook.com/authorize.php?api_key=%s&v=1.0&ext_perm=%s',$apikey, 'email'));
-		exit();
-		header('Location: '.sprintf('http://www.facebook.com/authorize.php?api_key=%s&v=1.0&ext_perm=%s',$apikey, 'email'));
-		 */
 
        	$sess = Mage::getSingleton('customer/session');
 		if (!$exUid) {
@@ -206,27 +199,5 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$stmt = $select->query();
 		$result = $stmt->fetchAll();
 		$quote_type_id = $result[0]['entity_type_id'];
-	}
-
-
-	protected function makeNewUser($fbParams) {
-		$pref = Mage::getConfig()->getTablePrefix();
-		$store = Mage::app()->getStore();
-		$storeId = $store->getStoreId();
-		$webstId = $store->getWebsiteId();
-		$customer = Mage::getModel('customer/customer');
-		$customer->setData('store_id',   $storeId);
-		$customer->setData('website_id', $webstId);
-		$customer->setData('is_active', 1);
-		$customer->save();
-		$customerId = $customer->getId();
-//		var_dump($customerId);exit();
-
-		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
-		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d').'")');
-		$stmt->execute();
-
-		return $customer;
 	}
 }
