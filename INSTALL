@@ -1,0 +1,90 @@
+Overview
+================================================================================
+
+1. Copy Module Activation XML file to app/etc/modules/
+2. Copy template files to your design folder
+3. Copy layout file to your design folder
+4. Copy translation file to app/local/xx_YY
+5. Refresh your cache
+6. Add Facebook App API Key and Secret
+
+Your Magento installation directory will be called {MageHome}
+
+*Note:  This module requires you to have a facebook.com account and a 
+functioning application on facebook.com.  You can create an application from 
+facebook.com by clicking the link "developers" at the bottom of your home page.
+From there, you should see a green button that says "Start Now".
+
+
+1. Copy Module Activation XML file to app/etc/modules/
+================================================================================
+The file "Metrof_FBConnect.xml" located in this folder needs to be copied to:
+  {MageHome}/app/etc/modules/
+
+
+2. Copy template files to your design folder
+================================================================================
+The directory "fbconnect" in "design/frontend.templates/" and all files under it 
+need to be installed in {MageHome}/app/design/frontend/default/default/templates
+or whichever directory your theme is installed in.  The resulting folder 
+structure should look like this:
+
+app/design/frontend/default/
+.
+`-- default
+    |-- layout
+    |-- locale
+    `-- template
+        `--fbconnect
+           `--customer_form_login.phtml
+
+
+3. Copy layout file to your design folder
+================================================================================
+The file "metrof_fbc.xml" in "design/frontend.layout/" needs to be copied to 
+{MageHome}/app/design/frontend/default/default/layout/
+or whichever directory your theme is installed in.  The resulting folder 
+structure should look like this:
+
+app/design/frontend/default/
+.
+`-- default
+    |-- layout
+	|   |-- ... other xml files
+    |   |--metrof_fbc.xml
+	|   `-- ... other xml files
+    |-- locale
+    `-- template
+
+
+
+4. Copy translation file to app/local/xx_YY
+================================================================================
+Assuming your chosen locale is "en_US" (for English in the U.S.) copy the file 
+"Metrof_FBConnect.csv" from "locale/en_US/" into {MageHome}/app/locale/en_US.
+Change "en_US" to whatever language your store runs under.  
+
+If no such file exists for your language, copy the file from the "en_US" folder 
+into the folder of your chosen locale.  You can then translate the items in 
+the CSV file into your own language.
+
+You can also customize the welcome message for your store by editing this file.
+
+
+5. Refresh your cache
+================================================================================
+Login to the admin page for Magento and choose "Cache Mamangement" from 
+the "System" menu.  Choose "refresh" from the drop down menu and submit the form.
+
+
+6. Add Facebook App API Key and Secret
+================================================================================
+You may need to logout of the admin and then log back in before you can 
+complete this next step.
+
+Choose "Configuration" under the "System" menu. You should now see a tab called 
+"Facebook" and a link under it called "FBConnect".
+
+Under the "Facebook Application Settings", paste your API Key value and 
+Application Secret value into the appropriate boxes and click "Save Config".
+You can obtain these values from Facebook.
