@@ -135,9 +135,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
 					));
 		}
-
 	}
-
 
 	/**
 	 * Fix up the passed in GET params to act like

@@ -24,6 +24,9 @@ CREATE TABLE {$this->getTable('fb_uid_link')} (
   `is_active` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`fb_uid_link_id`)
 );
+
+ALTER TABLE `fb_uid_link` ADD INDEX `fb_uid_idx` (`fb_uid`);
+ALTER TABLE `fb_uid_link` ADD INDEX `user_idx`   (`user_id`);
 ");
  
 }
