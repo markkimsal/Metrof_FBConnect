@@ -109,12 +109,12 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location');
 		$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
 
-		if ($attr['last_name'] !== '') {
+		if ($attr['last_name'] != '') {
 			$user->setLastname($attr['last_name']);
 		} else {
 			$user->setLastname('Customer');
 		}
-		if ($attr['first_name'] !== '') {
+		if ($attr['first_name'] != '') {
 			$user->setFirstname($attr['first_name']);
 		} else {
 			$user->setFirstname('Guest');
