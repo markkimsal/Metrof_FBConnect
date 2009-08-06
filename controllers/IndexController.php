@@ -37,6 +37,11 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 	 * Redirect to facebook with proper API keys in the URL
 	 */
 	public function loginAction() {
+		//figure out where the user came from
+		$session = Mage::getSingleton('customer/session');
+		if (isset($_SERVER['HTTP_REFERER'])) {
+			$session->setData('fbc_refer', $_SERVER['HTTP_REFERER']);
+		}
 		$locale = Mage::getStoreConfig('general/locale/code');
 		$urlParams = array();
 		$urlParts = array();
@@ -126,12 +131,17 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			//setup shipping address.
 		}
 
-		//redirect 
         $this->_redirect('customer/account');
+		//redirect to where they came from, or customer account page
+       	$sess = Mage::getSingleton('customer/session');
+		$refer = $sess->getData('fbc_refer');
+		if ($refer != '') {
+			$this->_redirectUrl($refer);
+			$sess->setData('fbc_refer', null);
+		}
 
 		$apikey = Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
 
-       	$sess = Mage::getSingleton('customer/session');
 		if (!$exUid) {
 			$sess->addSuccess(
 				$this->__('Congratulations.  Your facebook account is now connected with our store.')
@@ -192,9 +202,10 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 	protected function _getXdParams($secret) {
         $req = Mage::app()->getRequest();
 		$ses = $req->getParam('session');
-		$_s = json_decode($ses);
+		$_s = json_decode($ses, true);
 		//fix for incorrect FB API
 		$fb_params = array();
+		if (!is_array($_s)) return $fb_params;
 		$str = '';
 		foreach ($_s as $_k => $_v) {
 			if ($_k == 'sig') continue;
@@ -212,7 +223,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 		//verify params
 		$sig = self::generate_sig($fb_params, $secret);
-		$expectedSig = $_s->sig;
+		$expectedSig = $_s['sig'];
 		if ($sig !== $expectedSig) {
 			return array();
 		}

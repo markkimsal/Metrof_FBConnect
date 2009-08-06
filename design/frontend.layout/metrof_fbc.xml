@@ -36,18 +36,17 @@
 			<block type="customer/form_login" name="customer_form_login" template="fbconnect/customer_form_login.phtml"/>
         </reference>
 
+		<!-- turn off by changing value to 0 -->
         <reference name="customer_form_login">
 			<action method="setData"><key>use_fbconnect</key><value>1</value></action>
         </reference>
 	</fbconnect_index_index>
 
 
+	<!-- login buttons -->
     <customer_account_login>
-		<!--
-        <reference name="content">
-			<block type="customer/form_login" name="customer_form_login" template="fbconnect/customer_form_login.phtml"/>
-        </reference>
-		-->
+
+		<!-- turn off by changing value to 0 -->
         <reference name="customer_form_login">
             <action method="setTemplate"><template>fbconnect/customer_form_login.phtml</template></action>
 			<action method="setData"><key>use_fbconnect</key><value>1</value></action>
@@ -55,4 +54,16 @@
 	</customer_account_login>
 
 
+	<!--  checkout buttons -->
+    <checkout_onepage_index>
+   
+        <reference name="checkout.onepage.login">
+            <action method="setTemplate"><template>fbconnect/checkout_onepage_login.phtml</template></action>
+        </reference>
+
+		<!-- turn off by changing value to 0 -->
+        <reference name="checkout.onepage.login">
+			<action method="setData"><key>use_fbconnect</key><value>1</value></action>
+        </reference>
+	</checkout_onepage_index>
 </layout>
