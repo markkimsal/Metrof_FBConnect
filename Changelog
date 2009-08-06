@@ -1,3 +1,12 @@
+Aug 6 2009: version 1.0.2
+================================================================================
+Fixed redirect if logging in from checkout page.
+Added Spanish translation.
+
+Aug 4 2009: version 1.0.0
+================================================================================
+Initial Release to General Public.
+
 Jul 31 2009: version 0.3.0
 ================================================================================
 Initial Release to Beta Testers.
