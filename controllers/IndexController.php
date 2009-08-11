@@ -101,6 +101,15 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			$user = Mage::helper('fbconnect')->makeNewUser($fbParams);
 		} else {
 			$user = Mage::getModel('customer/customer')->load($exUid);
+			if ($user->getEntityId() == NULL) {
+				//a very rare situation happened,
+				// this user was previously deleted but their FB UID link was not.
+				// so, we need to delete the FB UID and make a new user
+				Mage::helper('fbconnect')->deleteFbUidByUserId($exUid);
+				$user = Mage::helper('fbconnect')->makeNewUser($fbParams);
+				//set thsi flag for the rest of the script
+				$exUid = -1;
+			}
 		}
 		$sess = Mage::getSingleton('customer/session');
 		$sess->setCustomer($user);

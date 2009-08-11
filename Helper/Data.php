@@ -150,4 +150,19 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getApiKey() {
 		return (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
 	}
+
+	/**
+	 * Deletes and fb_uid_link row given the *$userID*, not the fb_uid
+	 */
+	public function deleteFbUidByUserId($userId) {
+		$write = Mage::getSingleton('core/resource')->getConnection('core_write');
+
+		$tablePrefix = (string)Mage::getConfig()->getTablePrefix();
+		try {
+			$write->query( 'DELETE FROM '.$tablePrefix.'fb_uid_link WHERE `user_id` = ?', $userId);
+		} catch (Exception $e) {
+			//this is a very rare situation in which we need to delete an fb uid.
+			//the possibility of it failing and us knowing what to do is extremely small
+		}
+	}
 }
