@@ -111,8 +111,20 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		));
 
 
-		$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location');
-		$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
+		try {
+			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location');
+			$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
+		} catch (FacebookRestClientException $fbe) {
+			//session key is probably not valid
+			$attr = array();
+			//unset cookies
+			$fbCookie = array();
+			$fbCookie['session_key'] = '';
+			$fbCookie['user']        = '';
+			$fbCookie['expires']     = '';
+			$fbCookie['ss']          = '';
+			Mage::helper('fbconnect')->setFbCookies($fbCookie);
+		}
 
 		if ($attr['last_name'] != '') {
 			$user->setLastname($attr['last_name']);
@@ -171,7 +183,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 			$sess->addSuccess(
 				$this->__('Welcome, %s!',
-					$attr['first_name']
+					$user->getFirstname()
 				)
 			);
 		} else {
@@ -181,7 +193,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 			$sess->addSuccess(
 				$this->__('Welcome back, %s!',
-					$attr['first_name']
+					$user->getFirstname()
 				)
 			);
 

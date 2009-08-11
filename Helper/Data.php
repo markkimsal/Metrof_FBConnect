@@ -139,4 +139,8 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 
 		return $customer;
 	}
+
+	public function getApiKey() {
+		return (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
+	}
 }
