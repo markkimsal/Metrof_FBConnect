@@ -125,16 +125,23 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		$store = Mage::app()->getStore();
 		$storeId = $store->getStoreId();
 		$webstId = $store->getWebsiteId();
-		$customer = Mage::getModel('customer/customer');
+		//magento sets the ID to null in the controller post action, so we do the same
+		$customer = Mage::getModel('customer/customer')->setId(null);
 		$customer->setData('store_id',   $storeId);
 		$customer->setData('website_id', $webstId);
 		$customer->setData('is_active', 1);
+		$customer->setData('created_at', date('Y-m-d H:i:s'));
+		$customer->setData('updated_at', date('Y-m-d H:i:s'));
+		//this will set the group id
+		$customer->getGroupId();
+		//this wills et the tax class id
+		$customer->getTaxClassId();
 		$customer->save();
 		$customerId = $customer->getId();
 
 		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
 		$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
-		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d').'")');
+		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
 		$stmt->execute();
 
 		return $customer;

@@ -2,7 +2,7 @@
 <config>
    <modules>
       <Metrof_FBConnect>
-         <version>1.0.3</version>
+         <version>1.0.4</version>
          <depends>
             <Mage_Customer />
          </depends>
@@ -36,11 +36,6 @@
          </customer>
 		<fbconnect_entity>
 			<class>Metrof_FBConnect_Model_Entity</class>
-			<entities>
-				<entity>
-					<table>fb_uid_link</table>
-				</entity>
-			</entities>
 		</fbconnect_entity>
 		<core>
 			<rewrite>
