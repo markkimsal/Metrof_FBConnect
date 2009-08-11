@@ -47,4 +47,19 @@ extends Mage_Customer_Model_Entity_Customer  {
 
         return $this;
     }
+
+
+	/**
+	 * Delete any associated fb_uid_link as well
+	 */
+	protected function _afterDelete(Varien_Object $object) {
+		parent::_afterDelete($object);
+		$id = $object->getEntityId();
+		if (!$id) {
+			return;
+		}
+		$tablePrefix = (string)Mage::getConfig()->getTablePrefix();
+		$this->_getWriteAdapter()->delete($tablePrefix.'fb_uid_link',"user_id=".$id);
+		return;
+	}
 }
