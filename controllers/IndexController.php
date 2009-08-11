@@ -135,6 +135,15 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			Mage::helper('fbconnect')->setFbCookies($fbCookie);
 		}
 
+		$allowsEmail = FALSE;
+		//check to see if they allow email messages
+		try {
+			$allowsEmail = Mage::helper('fbconnect')->userAllowsEmail();
+		} catch (FacebookRestClientException $fbe) {
+			//already set the cookie to blank above.
+			$allowsEmail = FALSE;
+		}
+
 		if ($attr['last_name'] != '') {
 			$user->setLastname($attr['last_name']);
 		} else {
@@ -180,11 +189,13 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 					Mage::helper('fbconnect')->getEmailEditUrl()
 				)
 			);
-			$sess->addSuccess(
-				$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
-					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-				).'</ul>'
-			);
+			if (!$allowsEmail) {
+				$sess->addSuccess(
+					$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
+						'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
+					).'</ul>'
+				);
+			}
 
 			$sess->addSuccess(
 				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> '
@@ -206,11 +217,13 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 				)
 			);
 
-			$sess->addSuccess('<br/>'. 
-				$this->__('Allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a>',
-					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-				)
-			);
+			if (!$allowsEmail) {
+				$sess->addSuccess('<br/>'. 
+					$this->__('Allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a>',
+						'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
+					)
+				);
+			}
 		}
 	}
 

@@ -13,4 +13,10 @@ $installer->run("
 		WHERE fb.user_id IS NOT NULL
 ");
 
+$installer->run("
+	ALTER TABLE ".$this->getTable('fb_uid_link')." 
+    ADD COLUMN `allow_email` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 AFTER `is_active`
+");
+
+
 $installer->endSetup();

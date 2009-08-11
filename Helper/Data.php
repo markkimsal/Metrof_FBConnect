@@ -94,6 +94,31 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		return $ret;
 	}
 
+	/**
+	 * return true or false depending on if the user allows email
+	 */
+	public function userAllowsEmail($fbUid=NULL) {
+		$fbObj        = $this->getFb();
+		if ($fbUid === NULL) {
+			$fbUid = $fbObj->user;
+		}
+		$fbInfos = $fbObj->api_client->users_hasAppPermission('email', $fbUid);
+		$allow = (int)$fbInfos;
+
+		if (intval($fbUid) < 1) {
+			//some problem with fbUid, don't try to save it
+			return (bool)$allow;
+		}
+		//save setting
+		$write = Mage::getSingleton('core/resource')->getConnection('core_write');
+		$tablePrefix = (string)Mage::getConfig()->getTablePrefix();
+		try {
+			$write->query( 'UPDATE '.$tablePrefix.'fb_uid_link SET  `allow_email` = ? WHERE fb_uid = ?', array($allow, $fbUid));
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		return (bool)$allow;
+	}
 
 
 	/**
