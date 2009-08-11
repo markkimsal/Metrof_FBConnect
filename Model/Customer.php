@@ -5,7 +5,7 @@ extends Mage_Customer_Model_Customer {
 
     function _construct()
     {
-        $this->_init('fbconnect/customer');
+        $this->_init('customer/customer');
     }
 
 
