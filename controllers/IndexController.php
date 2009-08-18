@@ -193,9 +193,10 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 				$sess->addSuccess(
 					$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
 						'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-					).'</ul>'
+					)
 				);
 			}
+			$sess->addSuccess('</ul>');
 
 			$sess->addSuccess(
 				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> '
