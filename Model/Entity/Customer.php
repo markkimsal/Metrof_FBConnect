@@ -16,6 +16,9 @@ extends Mage_Customer_Model_Entity_Customer  {
     protected function _beforeSave(Varien_Object $customer)
     {
 
+		//parent:parent:_beforeSave
+        $this->walkAttributes('backend/beforeSave', array($customer));
+
 		//FB doesn't always give us an email... get over it.
 		if ($customer->getEmail()) {
 			$select = $this->_getReadAdapter()->select()
