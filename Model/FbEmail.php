@@ -27,12 +27,16 @@ extends Mage_Core_Model_Email_Template {
     public function send($email, $name=null, array $variables = array())
     {
         if(!$this->isValidForSend()) {
+			throw new Mage_Core_Exception('Failed to send message, not valid for send.');
             return false;
         }
 
 		if ($email == '') {
 			$fbContext = $this->_findFbUserByContext();
-			if (!$fbContext) return false;
+			if (!$fbContext) {
+				throw new Mage_Core_Exception('Failed to send message, no email, no facebook ID.');
+				return false;
+			}
 		}
 
 		if (isset($fbContext)) {
@@ -44,6 +48,7 @@ extends Mage_Core_Model_Email_Template {
 				$this->_sendAsFbNotification($variables, $fbUid, $storeId);
 			}
 			catch (Exception $e) {
+				throw new Mage_Core_Exception('Failed to send Facebook message: '.$e->getMessage());
 				return false;
 			}
 			return true;
@@ -181,7 +186,7 @@ extends Mage_Core_Model_Email_Template {
 			$fbml = $text;
 			$text = strip_tags($fbml);
         }
-		$fbObj = Mage::helper('fbconnect')->getFb();
+		$fbObj = Mage::helper('fbconnect')->getFbApi();
 		if ($fbUid === NULL) {
 			//use the currently logged in user
 			$fbUid = $fbObj->user;
@@ -194,8 +199,8 @@ extends Mage_Core_Model_Email_Template {
 		 */
 		$url = Mage::app()->getStore($storeId)->getUrl('customer/account');
 
-  		$ret  = $fbObj->api_client->notifications_sendEmail($fbUid, $subject, $text, $fbml);
-  		$ret2 = $fbObj->api_client->notifications_send(array($fbUid), $subject. '.  <a target="_blank" href="'.$url.'">Visit your account.</a>', 'app_to_user');
+  		$ret  = $fbObj->notifications_sendEmail($fbUid, $subject, $text, $fbml);
+  		$ret2 = $fbObj->notifications_send(array($fbUid), $subject. '.  <a target="_blank" href="'.$url.'">Visit your account.</a>', 'app_to_user');
 		return $ret;
 	}
 }

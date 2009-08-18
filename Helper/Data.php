@@ -190,4 +190,13 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 			//the possibility of it failing and us knowing what to do is extremely small
 		}
 	}
+
+	public function getFbApi() {
+
+		$apikey   = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
+		$fbSecret = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/secret');
+		//$dummy is used just to load the parent class
+		$dummy = new Metrof_FBConnect_Helper_Facebook($apikey, $fbSecret);
+		return new Metrof_FBConnect_Helper_FacebookRestClient($apikey, $fbSecret, null);
+	}
 }
