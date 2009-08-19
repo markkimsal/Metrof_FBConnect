@@ -86,6 +86,7 @@
 			<fbconnect>
 				<apikey>API KEY FROM FACEBOOK</apikey>
 				<secret>SECRET CODE FOR YOUR FACEBOOK APP</secret>
+				<use_fbconnect>1</use_fbconnect>
 				<!--
 				-->
 			</fbconnect>
@@ -94,6 +95,16 @@
 	</default>
 
     <adminhtml>
+        <translate>
+            <modules>
+                <Mage_Contacts>
+                    <files>
+                        <default>Metrof_FBConnect.csv</default>
+                    </files>
+                </Mage_Contacts>
+            </modules>
+        </translate>
+
         <acl>
             <resources>
                 <admin>

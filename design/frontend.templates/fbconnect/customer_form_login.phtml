@@ -42,7 +42,7 @@
         <div class="content">
             <h4><?php echo $this->__('New Customers') ?></h4>
             <p><?php echo $this->__('By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.') ?></p>
-			<?php if ($this->getData('use_fbconnect')) { ?>
+			<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
 				<p><?php echo Mage::helper('fbconnect')->__('Use your Facebook account for super-fast logins.');?><br/><a href="<?php echo $this->helper('fbconnect')->getLoginUrl();?>" ><img id="fb_login_image" src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_medium_long.gif" alt="Connect"/> </a></p>
 			<?php } ?>
         </div>
@@ -65,7 +65,7 @@
                     </li>
                 </ul>
                 <p class="required"><?php echo $this->__('* Required Fields') ?></p>
-			<?php if ($this->getData('use_fbconnect')) { ?>
+			<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
 				<p><?php echo Mage::helper('fbconnect')->__('If you previously used Facebook connect, click below.');?><br/><a href="<?php echo $this->helper('fbconnect')->getLoginUrl();?>"><img id="fb_login_image" src="http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_light_medium_long.gif" alt="Connect"/> </a></p>
 			<?php } ?>
 
