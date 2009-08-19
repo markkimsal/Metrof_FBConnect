@@ -199,8 +199,9 @@ extends Mage_Core_Model_Email_Template {
 		 */
 		$url = Mage::app()->getStore($storeId)->getUrl('customer/account');
 
-  		$ret  = $fbObj->notifications_sendEmail($fbUid, $subject, $text, $fbml);
-  		$ret2 = $fbObj->notifications_send(array($fbUid), $subject. '.  <a target="_blank" href="'.$url.'">Visit your account.</a>', 'app_to_user');
+		$ret  = $fbObj->notifications_sendEmail($fbUid, $subject, $text, $fbml);
+		$linkText = Mage::helper('fbconnect')->__('Visit your account.');
+		$ret2 = $fbObj->notifications_send(array($fbUid), $subject. '.  <a target="_blank" href="'.$url.'">'.$linkText.'</a>', 'app_to_user');
 		return $ret;
 	}
 }
