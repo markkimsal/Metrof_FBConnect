@@ -31,6 +31,23 @@
  */
 class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Action
 {
+    /**
+	 * really complicated way of saying $requireLogin = true;
+     *
+     */
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!$this->getRequest()->isDispatched()) {
+            return;
+        }
+
+		if (!Mage::getSingleton('customer/session')->authenticate($this)) {
+			$this->setFlag('', 'no-dispatch', true);
+		}
+    }
+
     public function indexAction() {
 		$this->loadLayout();
 		//make the "facebook connect" menuy item "active"

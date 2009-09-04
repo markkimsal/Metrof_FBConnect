@@ -126,13 +126,14 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			return false;
 		}
 
+		$currentUser =  Mage::getSingleton('customer/session')->getCustomer();
 
 		Mage::helper('fbconnect')->setFbCookies($fbParams);
 		//if found, login user
 		$exUid = $this->findExistingUid($fbParams);
 		if (!$exUid) {
 			//if not found, create a new one
-			$user = Mage::helper('fbconnect')->makeNewUser($fbParams);
+			$user = Mage::helper('fbconnect')->makeNewUser($fbParams, $currentUser);
 		} else {
 			$user = Mage::getModel('customer/customer')->load($exUid);
 			if ($user->getEntityId() == NULL) {
@@ -140,7 +141,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 				// this user was previously deleted but their FB UID link was not.
 				// so, we need to delete the FB UID and make a new user
 				Mage::helper('fbconnect')->deleteFbUidByUserId($exUid);
-				$user = Mage::helper('fbconnect')->makeNewUser($fbParams);
+				$user = Mage::helper('fbconnect')->makeNewUser($fbParams, $currentUser);
 				//set thsi flag for the rest of the script
 				$exUid = -1;
 			}

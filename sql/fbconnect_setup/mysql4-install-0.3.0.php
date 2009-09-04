@@ -13,8 +13,7 @@ $installer->startSetup();
 if (!$installer->tableExists($installer->getTable('fb_uid_link'))) {
 
 $installer->run("
--- DROP TABLE IF EXISTS {$this->getTable('fb_uid_link')};
-CREATE TABLE {$this->getTable('fb_uid_link')} (
+CREATE TABLE IF NOT EXISTS {$this->getTable('fb_uid_link')} (
   `fb_uid_link_id` int(10) unsigned NOT NULL auto_increment,
   `user_id` int(10) unsigned NOT NULL default 0,
   `fb_uid` int(10) unsigned NOT NULL default 0,

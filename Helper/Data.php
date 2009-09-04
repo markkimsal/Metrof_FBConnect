@@ -160,11 +160,16 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * Make a new user out of some parameters
 	 * @return Object $customer new customer
 	 */
-	public function makeNewUser($fbParams) {
+	public function makeNewUser($fbParams, $currentUser) {
 		$pref = Mage::getConfig()->getTablePrefix();
 		$store = Mage::app()->getStore();
 		$storeId = $store->getStoreId();
 		$webstId = $store->getWebsiteId();
+		if ($currentUser->getId()) {
+			var_dump('the user is logged in');exit();
+		} else {
+			var_dump('the user NOT is logged in');exit();
+		}
 		//magento sets the ID to null in the controller post action, so we do the same
 		$customer = Mage::getModel('customer/customer')->setId(null);
 		$customer->setData('store_id',   $storeId);

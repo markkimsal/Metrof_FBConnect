@@ -66,7 +66,10 @@
                 </ul>
                 <p class="required"><?php echo $this->__('* Required Fields') ?></p>
 			<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
+				<p><?php echo Mage::helper('fbconnect')->__('If you already have an account you can connect it with Facebook from your account page.');?></p>
+<!--
 				<p><?php echo Mage::helper('fbconnect')->__('If you previously used Facebook connect, click below.');?><br/><a href="<?php echo $this->helper('fbconnect')->getLoginUrl();?>"><img id="fb_login_image" src="<?php echo Mage::helper('fbconnect')->getFbButtonSrc();?>" alt="Connect"/> </a></p>
+-->
 			<?php } ?>
 
     </div>

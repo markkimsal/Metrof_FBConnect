@@ -52,5 +52,29 @@ class Metrof_FBConnect_Helper_Account extends Mage_Core_Helper_Abstract
 		}
 		return FALSE;
 	}
+
+	/**
+	 * Returns true if the user is connected with FB
+	 */
+	public function userHasClaimedAccount() {
+		$user =  Mage::getSingleton('customer/session')->getCustomer();
+		$uid = $user->getId();
+
+		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$pref = Mage::getConfig()->getTablePrefix();
+		$stmt = $read->query('SELECT `claimed_user_id`, `user_id` FROM `'.$pref.'fb_uid_link` WHERE user_id = "'.$uid.'"');
+		$q = $stmt->fetchAll();
+		if (!isset($q[0])) {
+			return FALSE;
+		}
+		if ($q[0]['claimed_user_id'] == NULL ||
+			$q[0]['claimed_user_id'] == 0) {
+				return FALSE;
+		}
+		//negative 1 means they won't ever claim
+		//0 or null means no answer yet
+		//positive number should match user_id field
+		return TRUE;
+	}
 }
 
