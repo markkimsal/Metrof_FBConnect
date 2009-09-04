@@ -51,6 +51,13 @@
     </global>
 
     <frontend>
+		<!-- this is needed because the customer account
+		page is always secure, so our FBC needs to be
+		secure as well because we forward between the two -->
+        <secure_url>
+            <fbconnect>/fbc/</fbconnect>
+        </secure_url>
+
      <layout>
           <updates>
               <metrof_fbc>

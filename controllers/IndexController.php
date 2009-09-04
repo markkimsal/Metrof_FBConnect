@@ -28,9 +28,37 @@
 
 class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 {
-    public function indexAction() {
+	public function debugAction() {
+
+		try {
+			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location', 'pic_square');
+			$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
+		} catch (FacebookRestClientException $fbe) {
+			//session key is probably not valid
+			$attr = array();
+			//unset cookies
+			$fbCookie = array();
+			$fbCookie['session_key'] = '';
+			$fbCookie['user']        = '';
+			$fbCookie['expires']     = '';
+			$fbCookie['ss']          = '';
+			Mage::helper('fbconnect')->setFbCookies($fbCookie);
+		}
+
+
+		/*
+			$sess = Mage::getSingleton('customer/session');
+			$sess->addSuccess(
+				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> '
+			);
+		 */
 		$this->loadLayout();
 		$this->renderLayout();
+
+		//echo				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square'].'"/> ';
+		//echo				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> ';
+		//        echo $this->getLayout()->getMessagesBlock()->getGroupedHtml;
+		//		echo $this->getMessagesBlock()->getGroupedHtml();
 	}
 
 	/**
@@ -42,6 +70,12 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		if (isset($_SERVER['HTTP_REFERER'])) {
 			$session->setData('fbc_refer', $_SERVER['HTTP_REFERER']);
 		}
+		//get SSL aware attributes
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			$forceSecure = TRUE;
+		} else {
+			$forceSecure = FALSE;
+		}
 		$locale = Mage::getStoreConfig('general/locale/code');
 		$urlParams = array();
 		$urlParts = array();
@@ -50,11 +84,11 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$urlParams['extern']         = 2;
 		$urlParams['display']        = 'popup';
 		$urlParams['api_key']        = urlencode(Mage::getStoreConfig('metrof_fbc/fbconnect/apikey'));
-		$urlParams['next']           = urlencode(Mage::getUrl('fbc/index/xdreceiver'));
+		$urlParams['next']           = urlencode(Mage::getUrl('fbc/index/xdreceiver', array('_forced_secure'=>$forceSecure)));
 		$urlParams['cancel_url']     = urlencode(Mage::getUrl('*'));
 		$urlParams['fname']          = '_opener';
 		$urlParams['locale']         = $locale;
-		$urlParams['channel_url']    = urlencode(Mage::getUrl('fbc/index/xdreceiver'));
+		$urlParams['channel_url']    = urlencode(Mage::getUrl('fbc/index/xdreceiver', array('_forced_secure'=>$forceSecure)));
 		$url = 'http://www.facebook.com/login.php?';
 
 		foreach ($urlParams as $_k => $_v) {
@@ -86,9 +120,9 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		//find an existing FB UID
 		if (!isset($fbParams['user'])) {
 			//failure
-        	$sess = Mage::getSingleton('customer/session');
+			$sess = Mage::getSingleton('customer/session');
 			$sess->addWarning('Your facebook login failed.  Try again later.');
-        	$this->_redirect('customer/account/login');
+			$this->_redirect('customer/account/login');
 			return false;
 		}
 
@@ -115,13 +149,13 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$sess->setCustomer($user);
 		Mage::dispatchEvent('customer_login', array('customer'=>$user));
 		Mage::dispatchEvent('customer_customer_authenticated', array(
-		   'model'    => $sess,
-		   'password' => '',
+			'model'    => $sess,
+			'password' => '',
 		));
 
 
 		try {
-			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location');
+			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location', 'pic_square');
 			$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
 		} catch (FacebookRestClientException $fbe) {
 			//session key is probably not valid
@@ -161,9 +195,9 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			//setup shipping address.
 		}
 
-        $this->_redirect('customer/account');
+		$this->_redirect('customer/account');
 		//redirect to where they came from, or customer account page
-       	$sess = Mage::getSingleton('customer/session');
+		$sess = Mage::getSingleton('customer/session');
 		$refer = $sess->getData('fbc_refer');
 		if ($refer != '') {
 			$this->_redirectUrl($refer);
@@ -186,15 +220,15 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			);
 			$sess->addSuccess(
 				$this->__('<li>Add your e-mail: <a href="%s">click here.</a></li>',
-					Mage::helper('fbconnect')->getEmailEditUrl()
-				)
-			);
+				Mage::helper('fbconnect')->getEmailEditUrl()
+			)
+		);
 			if (!$allowsEmail) {
 				$sess->addSuccess(
 					$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
-						'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
-					)
-				);
+					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
+				)
+			);
 			}
 			$sess->addSuccess('</ul>');
 
@@ -204,9 +238,9 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 			$sess->addSuccess(
 				$this->__('Welcome, %s!',
-					$user->getFirstname()
-				)
-			);
+				$user->getFirstname()
+			)
+		);
 		} else {
 			$sess->addSuccess(
 				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/>'
@@ -214,9 +248,9 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 			$sess->addSuccess(
 				$this->__('Welcome back, %s!',
-					$user->getFirstname()
-				)
-			);
+				$user->getFirstname()
+			)
+		);
 
 			if (!$allowsEmail) {
 				$sess->addSuccess('<br/>'. 
@@ -235,7 +269,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 	 * @requires access to  Request object
 	 */
 	protected function _getXdParams($secret) {
-        $req = Mage::app()->getRequest();
+		$req = Mage::app()->getRequest();
 		$ses = $req->getParam('session');
 		$_s = json_decode($ses, true);
 		//fix for incorrect FB API

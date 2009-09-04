@@ -33,7 +33,6 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
 	public function getLoginUrl() {
-
         return Mage::getUrl('fbc/index/login');
 	}
 
@@ -84,9 +83,25 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 
 	public function getDesiredAttr($attr) {
 		$fbObj        = $this->getFb();
+
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			$fbObj->api_client->set_use_ssl_resources(TRUE); 
+		}
 		$fbInfos = $fbObj->api_client->users_getInfo($fbObj->user, $attr);
+		//FIX BUG in facebook API which won't return pic_square_with_logo for SSL
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			if (isset($fbInfos[0])) {
+				if (isset($fbInfos[0]['pic_square_with_logo']) 
+					&& isset($fbInfos[0]['pic_square'])) {
+					$fbInfos[0]['pic_square_with_logo'] =
+					$fbInfos[0]['pic_square'] ;
+				}
+			}
+		}
+
 		if (isset($fbInfos[0]))
 			return $fbInfos[0];
+
 		$ret = array();
 		foreach ($attr as $v) {
 			$ret[$v] = null;
