@@ -42,6 +42,12 @@
         </reference>
 	</fbconnect_index_index>
 
+    <fbconnect_account_index>
+        <update handle="customer_account"/>
+        <reference name="content">
+            <block type="core/template" name="fbc_account" template="fbconnect/fbc_account_index.phtml"/>
+        </reference>
+	</fbconnect_account_index>
 
 	<!-- login buttons -->
     <customer_account_login>
@@ -66,4 +72,10 @@
 			<action method="setData"><key>use_fbconnect</key><value>1</value></action>
         </reference>
 	</checkout_onepage_index>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="fbconnect"><name>fbconnect</name><path>fbc/account/</path><label>Facebook Connect</label></action>
+		</reference>
+	</customer_account>
 </layout>

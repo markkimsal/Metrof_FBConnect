@@ -1,7 +1,7 @@
-<?
+<?php
 // vim: set tabstop=4 
 // +===========================================================================+
-// | Facebook Connect Magento Controller                                       |
+// | Facebook Connect Magento Helper                                           |
 // +===========================================================================+
 // | License: Proprietary                                                      |
 // +===========================================================================+
@@ -25,42 +25,32 @@
 // | SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.              |
 // +===========================================================================+
 
-
 /**
- * This class allows a customer's wishlist to be pushed to Facebook.
+ * Metrof_FBConnect default data helper
+ *
  */
-class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Action
+class Metrof_FBConnect_Helper_Account extends Mage_Core_Helper_Abstract
 {
-    public function indexAction() {
-		$this->loadLayout();
-		//make the "facebook connect" menuy item "active"
-        if ($navigationBlock = $this->getLayout()->getBlock('customer_account_navigation')) {
-            $navigationBlock->setActive('fbc/account');
-        }
 
-		$this->renderLayout();
-	}
+	/**
+	 * Returns true if the user is connected with FB
+	 */
+	public function userHasFbAccount() {
+		$user =  Mage::getSingleton('customer/session')->getCustomer();
 
-    public function wishlistNotifyAction() {
-
+		if (is_object($user)) {
+			$uid = $user->getId();
+		} else {
+			$uid = $user;
+		}
 		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
 		$pref = Mage::getConfig()->getTablePrefix();
-
-
-		$fbObj        = Mage::helper('fbconnect')->getFb();
-
-		if (!$fbObj->user) {
-			echo "you are not logged in.";
+		$stmt = $read->query('select `fb_uid` from `'.$pref.'fb_uid_link` where user_id = "'.$uid.'"');
+		$q = $stmt->fetchAll();
+		if (count($q) > 0) {
+			return TRUE;
 		}
-		$uid = $fbObj->user;
-//  		$ret = $fbObj->api_client->notifications_send(array($uid), "This is a test notification", 'app_to_user');
-
-		$ret = $fbObj->api_client->users_hasAppPermission('email', $uid);
-  		//$ret = $fbObj->api_client->notifications_sendEmail($uid, "Your order has been shipped", "This is a test notification", 'This is a test notification');
-
-		var_dump($ret);
-
-		$this->loadLayout();
-		$this->renderLayout();
+		return FALSE;
 	}
 }
+
