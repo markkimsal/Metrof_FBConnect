@@ -199,4 +199,18 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		$dummy = new Metrof_FBConnect_Helper_Facebook($apikey, $fbSecret);
 		return new Metrof_FBConnect_Helper_FacebookRestClient($apikey, $fbSecret, null);
 	}
+
+	/**
+	 * Return the img src attribute of the facebook connect button.
+	 *
+	 * Respects SSL/non-SSL modes
+	 */
+	public function getFbButtonSrc($size='medium', $len='long', $color='light') {
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			return 'https://www.facebook.com/images/fbconnect/login-buttons/connect_'.$color.'_'.$size.'_'.$len.'.gif';
+		} else {
+			return 'http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_'.$color.'_'.$size.'_'.$len.'.gif';
+		}
+
+	}
 }
