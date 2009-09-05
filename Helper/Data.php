@@ -165,29 +165,39 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		$store = Mage::app()->getStore();
 		$storeId = $store->getStoreId();
 		$webstId = $store->getWebsiteId();
+		$claimedId = NULL;
 		if ($currentUser->getId()) {
-			var_dump('the user is logged in');exit();
+			//var_dump('the user is logged in');exit();
+			//don't do anything, the user has an account
+			$claimedId = $currentUser->getId();
+			$customerId = $currentUser->getId();
+			$customer = $currentUser;
 		} else {
 			var_dump('the user NOT is logged in');exit();
+			//magento sets the ID to null in the controller post action, so we do the same
+			$customer = Mage::getModel('customer/customer')->setId(null);
+			$customer->setData('store_id',   $storeId);
+			$customer->setData('website_id', $webstId);
+			$customer->setData('is_active', 1);
+			$customer->setData('created_at', date('Y-m-d H:i:s'));
+			$customer->setData('updated_at', date('Y-m-d H:i:s'));
+			//this will set the group id
+			$customer->getGroupId();
+			//this wills et the tax class id
+			$customer->getTaxClassId();
+			$customer->save();
+			$customerId = $customer->getId();
 		}
-		//magento sets the ID to null in the controller post action, so we do the same
-		$customer = Mage::getModel('customer/customer')->setId(null);
-		$customer->setData('store_id',   $storeId);
-		$customer->setData('website_id', $webstId);
-		$customer->setData('is_active', 1);
-		$customer->setData('created_at', date('Y-m-d H:i:s'));
-		$customer->setData('updated_at', date('Y-m-d H:i:s'));
-		//this will set the group id
-		$customer->getGroupId();
-		//this wills et the tax class id
-		$customer->getTaxClassId();
-		$customer->save();
-		$customerId = $customer->getId();
 
 		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
-		('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
-		$stmt->execute();
+		if ($claimedId) {
+			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at, claimed_user_id) VALUES 
+			('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'", '.$claimedId.')');
+		} else {
+			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
+			('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
+		}
+			$stmt->execute();
 
 		return $customer;
 	}
@@ -232,5 +242,10 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 			return 'http://static.ak.fbcdn.net/images/fbconnect/login-buttons/connect_'.$color.'_'.$size.'_'.$len.'.gif';
 		}
 
+	}
+
+	public function getEmailPermHref() {
+		$apikey   = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
+		return 'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email';
 	}
 }

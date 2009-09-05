@@ -93,5 +93,30 @@ $alreadyClaimed = Mage::helper('fbconnect/account')->userHasClaimedAccount();
 
 
 
-
 <?php endif; //$hasFbAcct && !$alreadyClaimed ?>
+
+
+<?php if ($hasFbAcct):
+//show email settings  ?>
+
+<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+<div class="login-box">
+    <div class="col-2 registered-users">
+        <div class="content" style="min-height:40px;">
+            <h4><?php echo $this->__('Email Connect') ?></h4>
+            <p><?php echo $this->__('Here you can elect to receive full emails from our store to your normal email account via Facebook.  At any time you can turn off the ability to receive emails.') ?></p>
+            <ul class="form-list">
+                    <li>
+<?php
+					echo Mage::helper('fbconnect')->__('Change your Facebook email connect settings: <a target="_blank" href="%s">click here.</a></li>',
+						Mage::helper('fbconnect')->getEmailPermHref());
+?>
+                    </li>
+                </ul>
+        </div>
+    </div>
+</div>
+</form>
+
+
+<?php endif; //$hasFbAcct ?>
