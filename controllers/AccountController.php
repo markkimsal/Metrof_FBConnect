@@ -46,10 +46,15 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 		if (!Mage::getSingleton('customer/session')->authenticate($this)) {
 			$this->setFlag('', 'no-dispatch', true);
 		}
+
     }
 
     public function indexAction() {
 		$this->loadLayout();
+
+        $this->_initLayoutMessages('customer/session');
+        $this->_initLayoutMessages('catalog/session');
+
 		//make the "facebook connect" menuy item "active"
         if ($navigationBlock = $this->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('fbc/account');
@@ -57,6 +62,60 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 
 		$this->renderLayout();
 	}
+
+	/**
+	 * Allow a user to claim an existing account with username and password
+	 */
+	public function claimAction() {
+		//if the user username and password are a match
+
+		$sess = Mage::getSingleton('customer/session');
+
+		$oldUser = clone $sess->getCustomer();
+		//we want the oldUser completely disassociated from the current user
+		// to avoid any potential hacking attempts
+		$oldUid = $oldUser->getId();
+
+		$login = $this->getRequest()->getPost('login');
+		if (!empty($login['username']) && !empty($login['password'])) {
+			try {
+
+				//this will change the old user into the new user with "loadByEmail"
+        		if ($oldUser->authenticate($login['username'], $login['password'])) {
+					$sess->setCustomer($oldUser);
+					$store = Mage::app()->getStore();
+					$storeId = $store->getStoreId();
+					$fbObj = Mage::helper('fbconnect')->getFb();
+					Mage::helper('fbconnect')->createNewFbUidLink($oldUser->getId(), $fbObj->user, $storeId, $oldUser->getId());
+					//might not need this dispatch stuff, user is already "logged in"
+					/*
+					Mage::dispatchEvent('customer_login', array('customer'=>$oldUser));
+					Mage::dispatchEvent('customer_customer_authenticated', array(
+						'model'    => $sess,
+						'password' => '',
+					));
+					 */
+
+					$this->_redirect('fbc/account');
+					return;
+				} else {
+					die('no got login');
+				}
+			}
+			catch (Exception $e) {
+				$sess->addError($e->getMessage());
+				$sess->setUsername($login['username']);
+				$this->_redirect('fbc/account');
+				return;
+			}
+
+		}
+
+		$sess->addError($this->__('Login and password are required'));
+		$this->_redirect('fbc/account');
+
+	}
+
 
     public function wishlistNotifyAction() {
 

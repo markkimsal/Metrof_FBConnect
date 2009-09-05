@@ -29,11 +29,13 @@
 
 $hasFbAcct = Mage::helper('fbconnect/account')->userHasFbAccount();
 $alreadyClaimed = Mage::helper('fbconnect/account')->userHasClaimedAccount();
+//var_dump($alreadyClaimed);exit();
 ?>
 <div class="page-head">
     <h3><?php echo $this->__('Facebook Settings') ?></h3>
 </div>
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
 
 <?php if (!$hasFbAcct):
 //only show this form if the user has not already logged in via facebook
@@ -65,7 +67,7 @@ $alreadyClaimed = Mage::helper('fbconnect/account')->userHasClaimedAccount();
 ?>
 
 
-<form action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate">
+<form action="<?php echo $this->getUrl('fbc/account/claim') ?>" method="post" id="form-validate">
 <div class="login-box">
     <div class="col-2 registered-users">
         <div class="content">
@@ -89,8 +91,8 @@ $alreadyClaimed = Mage::helper('fbconnect/account')->userHasClaimedAccount();
     </div>
 </div>
 </form>
-
-
+<br class="blank-br"/>
+<br class="blank-br"/>
 
 
 <?php endif; //$hasFbAcct && !$alreadyClaimed ?>

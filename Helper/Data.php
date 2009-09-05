@@ -161,19 +161,16 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * @return Object $customer new customer
 	 */
 	public function makeNewUser($fbParams, $currentUser) {
-		$pref = Mage::getConfig()->getTablePrefix();
 		$store = Mage::app()->getStore();
 		$storeId = $store->getStoreId();
 		$webstId = $store->getWebsiteId();
 		$claimedId = NULL;
 		if ($currentUser->getId()) {
-			//var_dump('the user is logged in');exit();
 			//don't do anything, the user has an account
 			$claimedId = $currentUser->getId();
 			$customerId = $currentUser->getId();
 			$customer = $currentUser;
 		} else {
-			var_dump('the user NOT is logged in');exit();
 			//magento sets the ID to null in the controller post action, so we do the same
 			$customer = Mage::getModel('customer/customer')->setId(null);
 			$customer->setData('store_id',   $storeId);
@@ -189,18 +186,47 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 			$customerId = $customer->getId();
 		}
 
+		$this->createNewFbUidLink($customerId, $fbParams['user'], $storeId, $claimedId);
+		return $customer;
+	}
+
+	public function createNewFbUidLink($customerId, $fbUid, $storeId, $claimedId) {
+		$pref = Mage::getConfig()->getTablePrefix();
 		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
 		if ($claimedId) {
 			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at, claimed_user_id) VALUES 
-			('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'", '.$claimedId.')');
+			('.$customerId.', '.$fbUid.', '.$storeId.', "'.date('Y-m-d H:i:s').'", '.$claimedId.')');
+
+			$updateStmt = $write->prepare('UPDATE `'.$pref.'fb_uid_link` SET user_id ='.$customerId.', 
+				store_id = '.$storeId.', claimed_user_id = '.$claimedId.',
+				updated_at = "'.date('Y-m-d H:i:s').'"
+				WHERE fb_uid = '.$fbUid.'');
 		} else {
 			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
-			('.$customerId.', '.$fbParams['user'].', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
-		}
-			$stmt->execute();
+			('.$customerId.', '.$fbUid.', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
 
-		return $customer;
+			$updateStmt = $write->prepare('UPDATE `'.$pref.'fb_uid_link` SET user_id ='.$customerId.', 
+				store_id = '.$storeId.',
+				updated_at = "'.date('Y-m-d H:i:s').'"
+				WHERE fb_uid = '.$fbUid.'');
+		}
+		//updateStmt->execute() always returns true
+		// and the rowCount is 0 if the data doesn't change
+		// must check for row existance with a select
+		try {
+			if ($this->userIsFb($customerId)) {
+				$res = $updateStmt->execute();
+			} else {
+				$res = $stmt->execute();
+			}
+			return TRUE;
+		} catch (Exception $e) {
+			$res = FALSE;
+		}
+		return FALSE;
 	}
+
+
 
 	public function getApiKey() {
 		return (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
