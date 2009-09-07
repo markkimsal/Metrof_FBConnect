@@ -12,3 +12,14 @@
 "API Key","API Key"
 "App Secret","App Secret"
 "Visit your account.","Visit your account."
+
+;account page
+"Connect to an existing Account","Connect to an existing Account"
+"Enter your current username and password to connect your Facebook account with a previously registered account.","Enter your current username and password to connect your Facebook account with a previously registered account."
+"Email Address","Email Address"
+"Password","Password"
+"* Required Fields","* Required Fields"
+
+"Email Connect","Email Connect"
+"Here you can elect to receive full emails from our store to your normal email account via Facebook. At any time you can turn off the ability to receive emails.","Here you can elect to receive full emails from our store to your normal email account via Facebook. At any time you can turn off the ability to receive emails."
+"Change your Facebook email connect settings: <a target="_blank" href="%s">click here.</a>","Change your Facebook email connect settings: <a target="_blank" href="%s">click here.</a>"
