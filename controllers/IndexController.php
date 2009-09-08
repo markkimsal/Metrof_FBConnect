@@ -67,7 +67,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 	public function loginAction() {
 		//figure out where the user came from
 		$session = Mage::getSingleton('customer/session');
-		if (isset($_SERVER['HTTP_REFERER'])) {
+		if (!$session->getData('fbc_refer') && isset($_SERVER['HTTP_REFERER'])) {
 			$session->setData('fbc_refer', $_SERVER['HTTP_REFERER']);
 		}
 		//get SSL aware attributes
@@ -187,7 +187,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		if ($attr['first_name'] != '') {
 			$user->setFirstname($attr['first_name']);
 		} else {
-			$user->setFirstname('Guest');
+			$user->setFirstname('Facebook');
 		}
 		$user->save();
 
@@ -214,24 +214,23 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 			$sess->addSuccess(
 				$this->__('You can edit your shipping addresses in your account page.')
 			);
-			$sess->addSuccess('<ul>'.
-				$this->__('<li>Edit your shipping address: <a href="%s">click here.</a></li>',
+			$sess->addSuccess(
+				$this->__('Edit your shipping address: <a href="%s">click here.</a>',
 					Mage::helper('fbconnect')->getAddressEditUrl()
 				)
 			);
 			$sess->addSuccess(
-				$this->__('<li>Add your e-mail: <a href="%s">click here.</a></li>',
+				$this->__('Add your e-mail: <a href="%s">click here.</a>',
 				Mage::helper('fbconnect')->getEmailEditUrl()
 			)
 		);
 			if (!$allowsEmail) {
 				$sess->addSuccess(
-					$this->__('<li>Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a></li>',
+					$this->__('Or allow us to e-mail you via Facebook: <a target="_blank" href="%s">click here.</a>',
 					'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email'
 				)
 			);
 			}
-			$sess->addSuccess('</ul>');
 
 			$sess->addSuccess(
 				'<img class="fb_profile_pic_rendered" style="" title="you" alt="you" src="'.$attr['pic_square_with_logo'].'"/> '
