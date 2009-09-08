@@ -86,7 +86,8 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 					$store = Mage::app()->getStore();
 					$storeId = $store->getStoreId();
 					$fbObj = Mage::helper('fbconnect')->getFb();
-					Mage::helper('fbconnect')->createNewFbUidLink($oldUser->getId(), $fbObj->user, $storeId, $oldUser->getId());
+					Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
+					Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $oldUser->getId());
 					//might not need this dispatch stuff, user is already "logged in"
 					/*
 					Mage::dispatchEvent('customer_login', array('customer'=>$oldUser));
@@ -113,9 +114,36 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 
 		$sess->addError($this->__('Login and password are required'));
 		$this->_redirect('fbc/account');
-
 	}
 
+	/**
+	 * Set the referer to claimFbComplete action and redirect to login
+	 */
+	public function claimFbAction() {
+		$session = Mage::getSingleton('customer/session');
+		$session->setData('fbc_refer', Mage::getUrl('fbc/account/claimFbComplete'));
+		$this->_redirect('fbc/index/login');
+	}
+
+	/**
+	 * Do nothing, claimed ID was set properly in xdreciever action.
+	 */
+	public function claimFbCompleteAction() {
+		$this->_redirect('fbc/account/');
+		return TRUE;
+		die('sdjf');
+		$sess = Mage::getSingleton('customer/session');
+		$newUser = clone $sess->getCustomer();
+
+		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
+		//user waa
+		$store = Mage::app()->getStore();
+		$storeId = $store->getStoreId();
+		$fbObj = Mage::helper('fbconnect')->getFb();
+		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
+		Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $oldUser->getId());
+
+	}
 
     public function wishlistNotifyAction() {
 

@@ -46,7 +46,7 @@ $alreadyClaimed = Mage::helper('fbconnect/account')->userHasClaimedAccount();
     <h4 class="legend"><?php echo $this->__('Connect to Facebook') ?></h4>
     <ul>
         <li>
-			<p><?php echo Mage::helper('fbconnect')->__('Click the button below if you would like to connect your Facebook account with this one.');?><br/><a href="<?php echo $this->helper('fbconnect')->getLoginUrl();?>" ><img id="fb_login_image" src="<?php echo Mage::helper('fbconnect')->getFbButtonSrc();?>" alt="Connect"/> </a></p>
+			<p><?php echo Mage::helper('fbconnect')->__('Click the button below if you would like to connect your Facebook account with this one.');?><br/><a href="<?php echo $this->helper('fbconnect')->getClaimFbUrl();?>" ><img id="fb_login_image" src="<?php echo Mage::helper('fbconnect')->getFbButtonSrc();?>" alt="Connect"/> </a></p>
             <div class="input-box">
             </div>
         </li>

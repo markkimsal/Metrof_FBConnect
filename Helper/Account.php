@@ -76,5 +76,89 @@ class Metrof_FBConnect_Helper_Account extends Mage_Core_Helper_Abstract
 		//positive number should match user_id field
 		return TRUE;
 	}
+
+	/**
+	 * Convert the orders in old account to new account
+	 *
+	 * @return Int  number of orders converted
+	 */
+	public function convertAccountOrders($fromId, $toId) {
+		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$pref = Mage::getConfig()->getTablePrefix();
+		$stmt = $read->query('SELECT `entity_id` FROM `'.$pref.'sales_order` WHERE customer_id = "'.$fromId.'"');
+		$orderIds = array();
+		$q = $stmt->fetchAll();
+
+		foreach ($q as $_row) {
+			$orderIds[] = $_row['entity_id'];
+		}
+		if (!count($orderIds)) {
+			return 0;
+		}
+
+		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
+		$updateStmt = $read->query('UPDATE  `'.$pref.'sales_order` SET `customer_id` = "'.$toId.'" WHERE `customer_id`
+			IN ('.implode(',', $orderIds).')');
+		$res = $updateStmt->execute();
+
+		return $updateStmt->rowCount();
+	}
+
+	public function convertFbUidLink($oldId, $fbUid, $storeId, $claimedId) {
+		/*
+		var_dump($oldId);
+		var_dump($claimedId);
+		exit();
+		$pref = Mage::getConfig()->getTablePrefix();
+		$write = Mage::getSingleton('core/resource')->getConnection('core_read');
+		 */
+
+		$fbuid = Mage::getModel('fbconnect/fbuid');
+		//$x = Mage::getResourceSingleton('fbconnect/fbuid');
+		$fbuid->loadByUserId($oldId);
+		$fbuid->setData('store_id', $storeId);
+		$fbuid->setData('claimed_user_id', $claimedId);
+		$fbuid->setData('updated_at', date('Y-m-d H:i:s'));
+		$fbuid->setData('fb_uid', $fbUid);
+		$fbuid->setData('user_id', $claimedId);
+		$fbuid->save();
+
+		return TRUE;
+/*
+		if ($claimedId) {
+			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at, claimed_user_id) VALUES 
+			('.$oldId.', '.$fbUid.', '.$storeId.', "'.date('Y-m-d H:i:s').'", '.$claimedId.')');
+
+			$updateStmt = $write->prepare('UPDATE `'.$pref.'fb_uid_link` SET user_id ='.$oldId.', 
+				store_id = '.$storeId.', claimed_user_id = '.$claimedId.',
+				updated_at = "'.date('Y-m-d H:i:s').'"
+				WHERE fb_uid = '.$fbUid.'');
+		} else {
+			$stmt = $write->prepare('insert into `'.$pref.'fb_uid_link` (user_id, fb_uid, store_id, created_at) VALUES 
+			('.$oldId.', '.$fbUid.', '.$storeId.', "'.date('Y-m-d H:i:s').'")');
+
+			$updateStmt = $write->prepare('UPDATE `'.$pref.'fb_uid_link` SET user_id ='.$oldId.', 
+				store_id = '.$storeId.',
+				updated_at = "'.date('Y-m-d H:i:s').'"
+				WHERE fb_uid = '.$fbUid.'');
+		}
+		//updateStmt->execute() always returns true
+		// and the rowCount is 0 if the data doesn't change
+		// must check for row existance with a select
+		try {
+			if ($this->userIsFb($customerId)) {
+				$res = $updateStmt->execute();
+			} else {
+				$res = $stmt->execute();
+			}
+			return TRUE;
+		} catch (Exception $e) {
+			$res = FALSE;
+		}
+		return FALSE;
+ */
+	}
+
+
 }
 

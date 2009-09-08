@@ -36,6 +36,10 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getUrl('fbc/index/login');
 	}
 
+	public function getClaimFbUrl() {
+        return Mage::getUrl('fbc/account/claimFb');
+	}
+
 	public function getAddressEditUrl() {
         return Mage::getUrl('customer/address/edit');
 	}

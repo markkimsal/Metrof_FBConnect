@@ -2,7 +2,7 @@
 <config>
    <modules>
       <Metrof_FBConnect>
-         <version>1.1.9</version>
+         <version>1.2.0</version>
          <depends>
             <Mage_Customer />
          </depends>
@@ -23,20 +23,37 @@
 				<use>core_setup</use>
 			</connection>
 		</fbconnect_setup>
+		<fbconnect_read>
+			<connection>
+				<use>core_read</use>
+			</connection>
+		</fbconnect_read>
+		<fbconnect_write>
+			<connection>
+				<use>core_write</use>
+			</connection>
+		</fbconnect_write>
 	</resources>
     <models>
 		<fbconnect>
 			<class>Metrof_FBConnect_Model</class>
 			<resourceModel>fbconnect_entity</resourceModel>
 		</fbconnect>
+		<fbconnect_entity>
+			<class>Metrof_FBConnect_Model_Entity</class>
+            <entities>
+				<fbuid_link>
+					<table>fb_uid_link</table>
+				</fbuid_link>
+			</entities>
+		</fbconnect_entity>
+
          <customer>
            <rewrite>
              <customer>Metrof_FBConnect_Model_Customer</customer>
            </rewrite>
          </customer>
-		<fbconnect_entity>
-			<class>Metrof_FBConnect_Model_Entity</class>
-		</fbconnect_entity>
+
 		<core>
 			<rewrite>
 				<email_template>Metrof_FBConnect_Model_FbEmail</email_template>
