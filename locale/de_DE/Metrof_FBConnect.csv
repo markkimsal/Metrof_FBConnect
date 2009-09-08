@@ -8,10 +8,15 @@
 "Allow us to e-mail you via Facebook: <a target=""_blank"" href=""%s"">click here.</a>","Uns zu erlauben Sie via Facebook zu kontaktieren: <a target=""_blank"" href=""%s"">Bitte hier klicken</a>"
 "If you previously used Facebook connect, click below.","Falls Sie schon unseren Facebook Login benutzt haben, loggen Sie sich bitte hier ein."
 "Use your Facebook account for super-fast logins.","Benutzen Sie Ihren Facebook Login - schnell und unkompliziert!"
+
+;admin screens
 "Enable Facebook Connect features","Enable Facebook Connect features"
 "API Key","API Key"
 "App Secret","App Secret"
+
+;FB notification
 "Visit your account.","Visit your account."
+
 
 ;account page
 "Connect to an existing Account","Connect to an existing Account"
