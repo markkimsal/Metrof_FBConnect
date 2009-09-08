@@ -16,5 +16,5 @@ $installer->run("
 ALTER TABLE {$this->getTable('fb_uid_link')}
  ADD COLUMN `claimed_user_id` INTEGER UNSIGNED DEFAULT NULL AFTER `fb_uid`;
 ");
-
+}
 $installer->endSetup();
