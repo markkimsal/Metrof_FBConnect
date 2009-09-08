@@ -71,17 +71,21 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 
 		$sess = Mage::getSingleton('customer/session');
 
-		$oldUser = clone $sess->getCustomer();
+		$tmpUser = $sess->getCustomer();
+
+		//cloning deletes the entity_id
+		$oldUid = $tmpUser->getId();
 		//we want the oldUser completely disassociated from the current user
-		// to avoid any potential hacking attempts
-		$oldUid = $oldUser->getId();
+		// to avoid any potential hacking attempts, so clone the 
+		// user away from the session
+		$oldUser = clone $tmpUser;
 
 		$login = $this->getRequest()->getPost('login');
 		if (!empty($login['username']) && !empty($login['password'])) {
 			try {
 
 				//this will change the old user into the new user with "loadByEmail"
-        		if ($oldUser->authenticate($login['username'], $login['password'])) {
+				if ($oldUser->authenticate($login['username'], $login['password'])) {
 					$sess->setCustomer($oldUser);
 					$store = Mage::app()->getStore();
 					$storeId = $store->getStoreId();
@@ -133,7 +137,9 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 	 */
 	public function claimFbCompleteAction() {
 		$sess = Mage::getSingleton('customer/session');
-		$newUser = clone $sess->getCustomer();
+		$tmpUser = $sess->getCustomer();
+		$newId   = $tmpUser->getId();
+		$newUser = clone $tmpUser;
 
 
 		//user waa
@@ -141,7 +147,7 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 		$storeId = $store->getStoreId();
 		$fbObj = Mage::helper('fbconnect')->getFb();
 
-		if (!$newUser->getId()) {
+		if (!$newId) {
 			//user is not logged in
 			$this->_redirect('fbc/account/');
 			return TRUE;
@@ -161,13 +167,13 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 		}
 		$oldUid = $fbuid->getData('user_id');
 		$fbuid->setData('store_id', $storeId);
-		$fbuid->setData('claimed_user_id', $newUser->getId());
+		$fbuid->setData('claimed_user_id', $newId);
 		$fbuid->setData('updated_at', date('Y-m-d H:i:s'));
-		$fbuid->setData('user_id', $newUser->getId());
+		$fbuid->setData('user_id', $newId);
 		$fbuid->save();
 
 //		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
-		Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $newUser->getId());
+		Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $newId);
 
 		$this->_redirect('fbc/account/');
 		return TRUE;
