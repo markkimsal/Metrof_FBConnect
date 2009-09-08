@@ -10,7 +10,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-if (!$installer->tableExists($installer->getTable('fb_uid_link'))) {
+if ($installer->tableExists($installer->getTable('fb_uid_link'))) {
 
 $installer->run("
 ALTER TABLE {$this->getTable('fb_uid_link')}

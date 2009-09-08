@@ -96,8 +96,8 @@ class Metrof_FBConnect_Helper_Account extends Mage_Core_Helper_Abstract
 			return 0;
 		}
 
-		$read = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$updateStmt = $read->query('UPDATE  `'.$pref.'sales_order` SET `customer_id` = "'.$toId.'" WHERE `customer_id`
+		$write = Mage::getSingleton('core/resource')->getConnection('core_write');
+		$updateStmt = $write->query('UPDATE  `'.$pref.'sales_order` SET `customer_id` = "'.$toId.'" WHERE `entity_id`
 			IN ('.implode(',', $orderIds).')');
 		$res = $updateStmt->execute();
 

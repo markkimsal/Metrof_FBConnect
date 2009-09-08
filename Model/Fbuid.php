@@ -13,4 +13,12 @@ class Metrof_FBConnect_Model_Fbuid extends Mage_Core_Model_Abstract {
         $this->setOrigData();
         return $this;
 	}
+
+	public function loadByFbUid($fb_uid) {
+        $this->_getResource()->load($this, $fb_uid, 'fb_uid');
+        $this->_afterLoad();
+        $this->setOrigData();
+        return $this;
+	}
+
 }

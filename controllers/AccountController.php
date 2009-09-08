@@ -126,23 +126,51 @@ class Metrof_FBConnect_AccountController extends Mage_Core_Controller_Front_Acti
 	}
 
 	/**
-	 * Do nothing, claimed ID was set properly in xdreciever action.
+	 * Claimed ID might not have been set properly
+	 *
+	 * If the user created an account, then logged in with FB *twice*, 
+	 * we need to adjust the claimed ID
 	 */
 	public function claimFbCompleteAction() {
-		$this->_redirect('fbc/account/');
-		return TRUE;
-		die('sdjf');
 		$sess = Mage::getSingleton('customer/session');
 		$newUser = clone $sess->getCustomer();
 
-		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
+
 		//user waa
 		$store = Mage::app()->getStore();
 		$storeId = $store->getStoreId();
 		$fbObj = Mage::helper('fbconnect')->getFb();
-		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
-		Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $oldUser->getId());
 
+		if (!$newUser->getId()) {
+			//user is not logged in
+			$this->_redirect('fbc/account/');
+			return TRUE;
+		}
+		if (!$fbObj->user) {
+			//someone's trying to fake a cookie
+			$this->_redirect('fbc/account/');
+			return TRUE;
+		}
+		$fbuid = Mage::getModel('fbconnect/fbuid');
+		$fbuid->loadByFbUid($fbObj->user);
+
+		if ($fbuid->getData('claimed_user_id') > 0) {
+			//this account has already been claimed
+			$this->_redirect('fbc/account/');
+			return TRUE;
+		}
+		$oldUid = $fbuid->getData('user_id');
+		$fbuid->setData('store_id', $storeId);
+		$fbuid->setData('claimed_user_id', $newUser->getId());
+		$fbuid->setData('updated_at', date('Y-m-d H:i:s'));
+		$fbuid->setData('user_id', $newUser->getId());
+		$fbuid->save();
+
+//		Mage::helper('fbconnect/account')->convertFbUidLink($oldUid, $fbObj->user, $storeId, $oldUser->getId());
+		Mage::helper('fbconnect/account')->convertAccountOrders($oldUid, $newUser->getId());
+
+		$this->_redirect('fbc/account/');
+		return TRUE;
 	}
 
     public function wishlistNotifyAction() {
