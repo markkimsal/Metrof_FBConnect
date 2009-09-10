@@ -1,3 +1,11 @@
+Sep 10 2009: version 1.2.1
+================================================================================
+Fully SSL aware facebook assets should stop browser warnings
+User Account page to allow for connecting existing magento accounts to 
+  new facebook accounts
+Attempt to stop infrequent "Guest Customer" attributes pulled from facebook 
+  servers.
+
 Aug 6 2009: version 1.0.2
 ================================================================================
 Fixed redirect if logging in from checkout page.
