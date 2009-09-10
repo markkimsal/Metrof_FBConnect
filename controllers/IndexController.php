@@ -166,10 +166,11 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 
 		try {
 			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'username', 'current_location', 'pic_square');
-			$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr);
+//			$desiredAttr = array('first_name', 'last_name', 'pic_square_with_logo', 'pic_square');
+			$attr = Mage::helper('fbconnect')->getDesiredAttr($desiredAttr, $fbParams['user']);
 		} catch (FacebookRestClientException $fbe) {
+			$attr = array('first_name'=>'', 'last_name'=>'', 'pic_square_with_logo'=>'', 'username'=>'', 'current_location'=>'', 'pic_square'=>'');
 			//session key is probably not valid
-			$attr = array();
 			//unset cookies
 			$fbCookie = array();
 			$fbCookie['session_key'] = '';
@@ -201,9 +202,11 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$user->save();
 
 		//add or update shipping addresses
+		/*
 		if ($attr['current_location'] != NULL) {
 			//setup shipping address.
 		}
+		 */
 
 		$this->_redirect('customer/account');
 		//redirect to where they came from, or customer account page
@@ -296,7 +299,7 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 				$fb_params['user'] = $_v;
 				continue;
 			}
-			$fb_params[$_k] = $_v;
+			$fb_params[$_k] = "$_v";
 		}
 
 		//verify params

@@ -3041,6 +3041,7 @@ function toggleDisplay(id, type) {
 		$ret = json_decode($data, true);
 		if ($ret === NULL)
 		return $data;
+
 		return $ret;
 	}
   }
@@ -3125,6 +3126,7 @@ function toggleDisplay(id, type) {
       print '<pre id="sxml'.$this->cur_id.'" style="display: none; overflow: auto;">'.print_r($sxml, true).'</pre>';
       print '</div>';
     }
+
     return $result;
   }
 
@@ -3221,6 +3223,8 @@ function toggleDisplay(id, type) {
     $get_string = $this->create_url_string($get);
     $url_with_get = $this->server_addr . '?' . $get_string;
     if ($this->use_curl_if_available && function_exists('curl_init')) {
+//file_put_contents('/tmp/fbcon.txt', print_r($post_string,1));
+//file_put_contents('/tmp/fbcon_get.txt', print_r($url_with_get,1));
       $useragent = 'Facebook API PHP5 Client 1.1 (curl) ' . phpversion();
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_URL, $url_with_get);
@@ -3230,6 +3234,7 @@ function toggleDisplay(id, type) {
       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
       curl_setopt($ch, CURLOPT_TIMEOUT, 30);
       $result = $this->curl_exec($ch);
+//file_put_contents('/tmp/fbcon_r.txt', print_r($result,1));
       curl_close($ch);
     } else {
       $content_type = 'application/x-www-form-urlencoded';

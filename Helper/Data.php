@@ -84,9 +84,53 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		return $facebook;
 	}
 
+	/**
+	 * this version of getDesiredAttr makes the API call without the 
+	 * users session.  It should not fail as much as the other version
+	 * but you can't get the username and current_location w/o the 
+	 * user's session/connection
+	 */
+/*
+	public function getDesiredAttr($attr, $fbuid=NULL) {
+		$fbObj        = $this->getFbApi();
 
-	public function getDesiredAttr($attr) {
-		$fbObj        = $this->getFb();
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			$fbObj->set_use_ssl_resources(TRUE);
+		}
+		$fbInfos = $fbObj->users_getInfo($fbuid, $attr);
+		//FIX BUG in facebook API which won't return pic_square_with_logo for SSL
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			if (isset($fbInfos[0])) {
+				if (isset($fbInfos[0]['pic_square_with_logo'])
+					&& isset($fbInfos[0]['pic_square'])) {
+					$fbInfos[0]['pic_square_with_logo'] =
+					$fbInfos[0]['pic_square'] ;
+				}
+			}
+		}
+
+		if (isset($fbInfos[0]))
+			return $fbInfos[0];
+
+		var_dump($attr);
+		var_dump($fbInfos);
+		var_dump($fbObj);
+		exit();
+		$ret = array();
+		foreach ($attr as $v) {
+			$ret[$v] = null;
+		}
+		return $ret;
+	}
+	// */
+
+	/**
+	 * This verison of getDesiredAttr requires the fbObj
+	 * to have an active session on it.  It should be allowed to 
+	 * get more attributes because the user is currently logged in.
+	 */
+	public function getDesiredAttr($attr, $fbuid=NULL) {
+		$fbObj  = $this->getFb();
 
 		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
 			$fbObj->api_client->set_use_ssl_resources(TRUE); 
@@ -106,12 +150,21 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		if (isset($fbInfos[0]))
 			return $fbInfos[0];
 
+		/*
+		var_dump($attr);
+		var_dump($fbInfos);
+		var_dump($fbObj);
+		exit();
+		 */
+
 		$ret = array();
 		foreach ($attr as $v) {
 			$ret[$v] = null;
 		}
 		return $ret;
 	}
+
+
 
 	/**
 	 * return true or false depending on if the user allows email
