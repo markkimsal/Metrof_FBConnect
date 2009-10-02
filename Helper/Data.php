@@ -90,7 +90,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * but you can't get the username and current_location w/o the 
 	 * user's session/connection
 	 */
-/*
+
 	public function getDesiredAttr($attr, $fbuid=NULL) {
 		$fbObj        = $this->getFbApi();
 
@@ -112,10 +112,6 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		if (isset($fbInfos[0]))
 			return $fbInfos[0];
 
-		var_dump($attr);
-		var_dump($fbInfos);
-		var_dump($fbObj);
-		exit();
 		$ret = array();
 		foreach ($attr as $v) {
 			$ret[$v] = null;
@@ -129,6 +125,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * to have an active session on it.  It should be allowed to 
 	 * get more attributes because the user is currently logged in.
 	 */
+	/*
 	public function getDesiredAttr($attr, $fbuid=NULL) {
 		$fbObj  = $this->getFb();
 
@@ -155,7 +152,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		var_dump($fbInfos);
 		var_dump($fbObj);
 		exit();
-		 */
+		 * /
 
 		$ret = array();
 		foreach ($attr as $v) {
@@ -163,6 +160,7 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return $ret;
 	}
+	 */
 
 
 

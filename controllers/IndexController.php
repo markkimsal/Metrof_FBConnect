@@ -346,3 +346,5 @@ class Metrof_FBConnect_IndexController extends Mage_Core_Controller_Front_Action
 		$quote_type_id = $result[0]['entity_type_id'];
 	}
 }
+
+
