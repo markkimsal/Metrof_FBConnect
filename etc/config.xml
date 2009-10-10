@@ -72,8 +72,13 @@
 		page is always secure, so our FBC needs to be
 		secure as well because we forward between the two -->
         <secure_url>
-            <fbconnect>/fbc/</fbconnect>
+			<fbconnect>/fbc/index/</fbconnect>
+			<fbconnect_account>/fbc/account/</fbconnect_account>
         </secure_url>
+		<!--
+		/fbc/xdreciever doesn't need to be forced into SSL
+		because of issues with cross domain and javascript iframes
+		-->
 
      <layout>
           <updates>
@@ -111,6 +116,7 @@
 				<apikey>API KEY FROM FACEBOOK</apikey>
 				<secret>SECRET CODE FOR YOUR FACEBOOK APP</secret>
 				<use_fbconnect>1</use_fbconnect>
+				<show_login_button>1</show_login_button>
 				<!--
 				-->
 			</fbconnect>

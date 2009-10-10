@@ -1,0 +1,10 @@
+<?php
+//    $_helper = $this->helper('catalog/output');
+//    $_product = $this->getProduct();
+//	$_prodname = $_helper->productAttribute($_product, $this->htmlEscape($_product->getName()), 'name'); 
+?>
+<!-- does not work: iframe/security issue 
+<fb:share-button class="url" href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>" type="icon_link">
+</fb:share-button>
+-->
+<a style="text-decoration: none;" target="_blank" onclick='window.open("http://www.facebook.com/share.php?u=<?php echo urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);?>", "fb-sharethis"); return false;' class="fb_share_link" href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>">Share on Facebook</a>
