@@ -9,7 +9,7 @@
 
 		<div class="fb-top-button">
 		<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
-			<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/show_login_button')) { ?>
+			<?php if (Mage::getStoreConfig('metrof_fbc/fbc_features/show_login_button')) { ?>
 				<a href="<?php echo $this->helper('fbconnect')->getLoginUrl();?>" ><img id="fb_login_image" src="<?php echo Mage::helper('fbconnect')->getFbButtonSrc('medium', 'short');?>" alt="Connect"/> </a>
 			<?php } ?>
 		<?php } ?>

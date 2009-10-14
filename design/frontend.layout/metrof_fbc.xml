@@ -78,4 +78,28 @@
             <action method="addLink" translate="label" module="fbconnect"><name>fbconnect</name><path>fbc/account/</path><label>Facebook Connect</label></action>
 		</reference>
 	</customer_account>
+
+	<!-- product detail -->
+    <catalog_product_view>
+        <reference name="product.info">
+             <block type="catalog/product_view" name="product.info.other" as="other" template="fbconnect/share_this.phtml"/>
+		</reference>
+        <reference name="product.info.additional">
+			<block type="core/template" name="fbccomment" as="fbccomment" template="fbconnect/fbc_comment.phtml" />
+		</reference>
+	</catalog_product_view>
+
+
+	<default>
+		<reference  name="top.links">
+            <action method="setTemplate"><template>fbconnect/page_template_links.phtml</template></action>
+		</reference>
+
+		<reference  name="footer">
+             <block type="core/template" name="fbconnect.js" as="fbjs" template="fbconnect/page_footer_js.phtml"/>
+			<!--
+            <block type="page/html_footer" name="footer" as="footer" template="page/html/footer.phtml">
+				-->
+		</reference>
+	</default>
 </layout>

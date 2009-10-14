@@ -7,4 +7,9 @@
 <fb:share-button class="url" href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>" type="icon_link">
 </fb:share-button>
 -->
-<a style="text-decoration: none;" target="_blank" onclick='window.open("http://www.facebook.com/share.php?u=<?php echo urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);?>", "fb-sharethis"); return false;' class="fb_share_link" href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>">Share on Facebook</a>
+
+<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
+	<?php if (Mage::getStoreConfig('metrof_fbc/fbc_features/show_login_button')) { ?>
+		<a style="text-decoration: none;" target="_blank" onclick='window.open("http://www.facebook.com/share.php?u=<?php echo urlencode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']);?>", "fb-sharethis"); return false;' class="fb_share_link" href="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];?>">Share on Facebook</a>
+	<?php } ?>
+<?php } ?>

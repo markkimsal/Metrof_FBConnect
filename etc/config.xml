@@ -2,7 +2,7 @@
 <config>
    <modules>
       <Metrof_FBConnect>
-         <version>1.2.3</version>
+         <version>1.2.9</version>
          <depends>
             <Mage_Customer />
          </depends>
@@ -116,10 +116,14 @@
 				<apikey>API KEY FROM FACEBOOK</apikey>
 				<secret>SECRET CODE FOR YOUR FACEBOOK APP</secret>
 				<use_fbconnect>1</use_fbconnect>
-				<show_login_button>1</show_login_button>
 				<!--
 				-->
 			</fbconnect>
+			<fbc_features>
+				<show_login_button>1</show_login_button>
+				<show_share_this>1</show_share_this>
+				<show_comments>0</show_comments>
+			</fbc_features>
 		</metrof_fbc>
 
 	</default>
