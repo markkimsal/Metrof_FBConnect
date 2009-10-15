@@ -329,4 +329,20 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		$apikey   = (string) Mage::getStoreConfig('metrof_fbc/fbconnect/apikey');
 		return 'http://www.facebook.com/authorize.php?api_key='.$apikey.'&v=1.0&ext_perm=email';
 	}
+
+	public function getFeatureLoaderSrc() {
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			return 'https://www.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php';
+		} else {
+			return 'http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php';
+		}
+	}
+
+	public function getXdReceiverUrl() {
+		if ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) {
+			return Mage::getUrl('fbc/xdreceiver/index', array('_forced_secure'=>true));
+		} else {
+			return Mage::getUrl('fbc/xdreceiver/index');
+		}
+	}
 }

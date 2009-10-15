@@ -1,9 +1,9 @@
 
 <?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
-<script src="http://static.ak.connect.facebook.com/js/api_lib/v0.4/FeatureLoader.js.php/en_US" type="text/javascript"></script>
+<script src="<?php echo $this->helper('fbconnect')->getFeatureLoaderSrc();?>" type="text/javascript"></script>
 <script type="text/javascript">
 	FB_RequireFeatures(["Connect"], function(){
-	FB.init("<?php echo $this->helper('fbconnect')->getApiKey();?>", "<?php echo Mage::getUrl('fbc/xdreceiver/index');?>");
+	FB.init("<?php echo $this->helper('fbconnect')->getApiKey();?>", "<?php echo $this->helper('fbconnect')->getXdReceiverUrl();?>");
 	//  FB.XdComm.Server.init(<site relative url to xd_receiver.htm>);
 	//  FB.CanvasClient.startTimerToSizeToContent();
 	});
