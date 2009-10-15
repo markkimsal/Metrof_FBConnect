@@ -123,6 +123,7 @@
 				<show_login_button>1</show_login_button>
 				<show_share_this>1</show_share_this>
 				<show_comments>0</show_comments>
+				<allow_stream>1</allow_stream>
 			</fbc_features>
 			<fbc_stream>
 				<caption>
