@@ -91,6 +91,25 @@
 						</show_comments>
                     </fields>
 				</fbc_features>
+				<fbc_stream>
+					<label>Facebook Publish Orders</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_login_button translate="label" module="fbconnect">
+							<label>Caption Text</label>
+							<comment>This text must start with {*actor*} and will show up below the customer's comment.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</show_login_button>
+					</fields>
+				</fbc_stream>
 			</groups>
 		</metrof_fbc>
 	</sections>

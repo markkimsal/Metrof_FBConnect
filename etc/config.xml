@@ -124,6 +124,11 @@
 				<show_share_this>1</show_share_this>
 				<show_comments>0</show_comments>
 			</fbc_features>
+			<fbc_stream>
+				<caption>
+{*actor*} just bought some great stuff from our store.
+				</caption>
+			</fbc_stream>
 		</metrof_fbc>
 
 	</default>

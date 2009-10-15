@@ -1,0 +1,29 @@
+<?php 
+	$storeName   = Mage::app()->getStore()->getName(); 
+	$storeUrl    = Mage::getUrl();
+	$fbcCaption  = Mage::getStoreConfig('metrof_fbc/fbc_stream/caption');
+
+?>
+
+<?php if (Mage::getStoreConfig('metrof_fbc/fbconnect/use_fbconnect')) { ?>
+	<?php if (Mage::getStoreConfig('metrof_fbc/fbc_features/show_comments')) { ?>
+<div class="fb_order_success box base-mini">
+	<div class="head"><h4>Publish to Facebook</h4></div>
+	<div class="content">
+		Share your purchase with your friends.
+	<a href="#" onclick="fbc_showDialog();">Publish this to your wall.</a>
+	</div>
+</div>
+<script type="text/javascript">
+function fbc_showDialog() {
+	var fbc_attachment ={
+		'caption':'<?php echo $fbcCaption;?>'};
+	var fbc_alinks = [
+		{'text': 'Visit <?php echo $storeName; ?>',
+		'href': '<?php echo $storeUrl;?>'}];
+	FB.Connect.streamPublish('', fbc_attachment, fbc_alinks, null);
+}
+</script>
+
+	<?php } ?>
+<?php } ?>

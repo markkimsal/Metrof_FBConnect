@@ -102,4 +102,12 @@
 				-->
 		</reference>
 	</default>
+
+	<!-- post purchase to wall -->
+
+    <checkout_onepage_success>
+		<reference name="checkout.success">
+			<block type="core/template" name="fbc.checkout.success" template="fbconnect/checkout_success.phtml"/>
+		</reference>
+	</checkout_onepage_success>
 </layout>
