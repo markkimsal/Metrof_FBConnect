@@ -25,6 +25,7 @@ ln -sf ../../../../../../../controllers 1.simple.install/app/code/local/Metrof/F
 ln -sf ../../../../../../../etc 1.simple.install/app/code/local/Metrof/FBConnect/
 ln -sf ../../../../../../../design 1.simple.install/app/code/local/Metrof/FBConnect/
 ln -sf ../../../../../../../Helper 1.simple.install/app/code/local/Metrof/FBConnect/
+ln -sf ../../../../../../../Model 1.simple.install/app/code/local/Metrof/FBConnect/
 ln -sf ../../../../../../../locale 1.simple.install/app/code/local/Metrof/FBConnect/
 ln -sf ../../../../../../../Metrof_FBConnect.xml 1.simple.install/app/code/local/Metrof/FBConnect/
 ln -sf ../../../../../../../sql 1.simple.install/app/code/local/Metrof/FBConnect/
@@ -37,6 +38,7 @@ ln -sf ../../../../controllers 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../etc 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../design 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../Helper 2.advanced.install/Metrof/FBConnect/
+ln -sf ../../../../Model 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../locale 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../sql 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../Metrof_FBConnect.xml 2.advanced.install/Metrof/FBConnect/
