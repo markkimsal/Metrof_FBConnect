@@ -237,6 +237,10 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 			$customer->getGroupId();
 			//this wills et the tax class id
 			$customer->getTaxClassId();
+
+			//force new customers active since FB users cannot 
+			// reply to emails
+			$customer->setForceConfirmed(true);
 			$customer->save();
 			$customerId = $customer->getId();
 		}
