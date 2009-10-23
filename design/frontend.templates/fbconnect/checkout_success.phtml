@@ -1,7 +1,14 @@
 <?php 
 	$storeName   = Mage::app()->getStore()->getName(); 
 	$storeUrl    = Mage::getUrl();
-	$fbcCaption  = Mage::getStoreConfig('metrof_fbc/fbc_stream/caption');
+	$fbcCaption  = str_replace("\n", "", Mage::getStoreConfig('metrof_fbc/fbc_stream/caption'));
+	$fbcCaption  = str_replace("'", "\'", $fbcCaption);
+
+	$fbcLinkTxt  = str_replace("\n", "", Mage::getStoreConfig('metrof_fbc/fbc_stream/visit_link_text'));
+	$fbcLinkTxt  = str_replace("'", "\'", $fbcLinkTxt);
+	if ($fbcLinkTxt == '') {
+		$fbcLinkTxt = 'Visit '.$storeName;
+	}
 
 ?>
 
@@ -19,7 +26,7 @@ function fbc_showDialog() {
 	var fbc_attachment ={
 		'caption':'<?php echo $fbcCaption;?>'};
 	var fbc_alinks = [
-		{'text': 'Visit <?php echo $storeName; ?>',
+		{'text': '<?php echo $fbcLinkTxt; ?>',
 		'href': '<?php echo $storeUrl;?>'}];
 	FB.Connect.streamPublish('', fbc_attachment, fbc_alinks, null);
 }

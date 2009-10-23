@@ -2,7 +2,7 @@
 <config>
    <modules>
       <Metrof_FBConnect>
-         <version>1.2.9</version>
+         <version>1.3.0</version>
          <depends>
             <Mage_Customer />
          </depends>
@@ -129,6 +129,9 @@
 				<caption>
 {*actor*} just bought some great stuff from our store.
 				</caption>
+				<visit_link_text>
+Visit Our Store
+				</visit_link_text>
 			</fbc_stream>
 		</metrof_fbc>
 

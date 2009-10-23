@@ -109,7 +109,7 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <show_login_button translate="label" module="fbconnect">
+                        <caption translate="label" module="fbconnect">
 							<label>Caption Text</label>
 							<comment>This text must start with {*actor*} and will show up below the customer's comment.</comment>
                             <frontend_type>text</frontend_type>
@@ -117,7 +117,16 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-						</show_login_button>
+						</caption>
+                        <visit_link_text translate="label" module="fbconnect">
+							<label>Store Link Text</label>
+							<comment>A link to your store will be included in the post, type what you want the customer's friends to see as a link.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+						</visit_link_text>
 					</fields>
 				</fbc_stream>
 			</groups>
