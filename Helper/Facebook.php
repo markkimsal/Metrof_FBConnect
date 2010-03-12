@@ -255,11 +255,19 @@ class Metrof_FBConnect_Helper_Facebook {
 			foreach ($cookies as $name) {
 				setcookie($this->api_key . '_' . $name, false, time() - 3600);
 				setcookie($this->api_key . '_' . $name, false, time() - 3600, $cookiePath);
+				setcookie($this->api_key . '_' . $name, false, time() - 3600, $cookiePath, $this->base_domain);
 				unset($_COOKIE[$this->api_key . '_' . $name]);
 			}
 			setcookie($this->api_key, false, time() - 3600);
 			setcookie($this->api_key, false, time() - 3600, $cookiePath);
+			setcookie($this->api_key, false, time() - 3600, $cookiePath, $this->base_domain);
 			unset($_COOKIE[$this->api_key]);
+
+			if ($this->base_domain != null) {
+				$base_domain_cookie = 'base_domain_' . $this->api_key;
+				setcookie($base_domain_cookie, false, (time() - 3600), $cookiePath, $this->base_domain);
+				$_COOKIE[$base_domain_cookie] = $this->base_domain;
+			}
 		}
 
 		// now, clear the rest of the stored state
