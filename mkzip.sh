@@ -44,6 +44,6 @@ ln -sf ../../../../INSTALL 2.advanced.install/Metrof/FBConnect/
 ln -sf ../../../../LICENSE 2.advanced.install/Metrof/FBConnect/
 
 
-zip -r ../../../Metrof_FBConnect_magento-1.3.0.zip . -x "*~"
+zip -r ../../../Metrof_FBConnect_magento-1.3.2.zip . -x "*~"
 #cd ../../
 #zip -r Metrof_FBConnect_magento-1.2.2.zip Metrof/FBConnect/ -x "Metrof/FBConnect/.git*" -x "*~" -x "Metrof/FBConnect/mkzip.sh" -x "Metrof/FBConnect/test_res.php"

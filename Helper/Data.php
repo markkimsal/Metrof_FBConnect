@@ -89,8 +89,11 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * users session.  It should not fail as much as the other version
 	 * but you can't get the username and current_location w/o the 
 	 * user's session/connection
+	 *
+	 * Facebook's documentation is incorrect, the session ID is *not* optional
 	 */
 
+	/*
 	public function getDesiredAttr($attr, $fbuid=NULL) {
 		$fbObj        = $this->getFbApi();
 
@@ -124,8 +127,10 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 	 * This verison of getDesiredAttr requires the fbObj
 	 * to have an active session on it.  It should be allowed to 
 	 * get more attributes because the user is currently logged in.
+	 *
+	 * Facebook's documentation is incorrect, the session ID is *not* optional
 	 */
-	/*
+	// *
 	public function getDesiredAttr($attr, $fbuid=NULL) {
 		$fbObj  = $this->getFb();
 
@@ -147,21 +152,13 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		if (isset($fbInfos[0]))
 			return $fbInfos[0];
 
-		/*
-		var_dump($attr);
-		var_dump($fbInfos);
-		var_dump($fbObj);
-		exit();
-		 * /
-
 		$ret = array();
 		foreach ($attr as $v) {
 			$ret[$v] = null;
 		}
 		return $ret;
 	}
-	 */
-
+	// */
 
 
 	/**
@@ -348,5 +345,29 @@ class Metrof_FBConnect_Helper_Data extends Mage_Core_Helper_Abstract
 		} else {
 			return Mage::getUrl('fbc/xdreceiver/index');
 		}
+	}
+
+	/**
+	 * Double check if session is still active, if not, the 
+	 * user should be logged out with $this->killFbSession($fbObj);
+	 */
+	public function isSessionGolden($fbObj) {
+		try {
+			if (!$fbObj->get_loggedin_user()) {
+				return false;
+			}
+			$user = $fbObj->api_client->fql_query('SELECT uid, pic_square, first_name FROM user WHERE uid = ' . $fbObj->get_loggedin_user());
+		} catch (Exception $e) {
+			return false;
+		}
+		if (is_array($user) && isset($user[0])) {
+			return true;
+		}
+		return false;
+	}
+
+	public function killFbSession($fbObj) {
+		$fbObj->set_user(null, null);	
+		$fbObj->clear_cookie_state();
 	}
 }
