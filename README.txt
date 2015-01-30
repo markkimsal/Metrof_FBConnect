@@ -1,3 +1,6 @@
+*** This project is abandoned. ***
+================================================================================
+
 There are 2 installation methods.
 
 When Should I Use the Simple Installation?
